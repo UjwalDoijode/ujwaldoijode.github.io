@@ -157,3 +157,16 @@ body {
     height: 300px;
   }
 }
+
+.status {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+}
+
+.divider {
+  width: 80%;
+  height: 1px;
+  margin: 60px auto;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+}
