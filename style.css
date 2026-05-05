@@ -1,0 +1,138 @@
+:root {
+    --bg: #0b0b0b;
+    --text: #ffffff;
+    --sub: #94a3b8;
+    --border: rgba(255,255,255,0.15);
+}
+
+/* RESET */
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body {
+    font-family:'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* HERO */
+.hero {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:80px;
+    gap:60px;
+}
+
+/* TEXT */
+.name {
+    font-size:3rem;
+}
+
+.tagline {
+    color:var(--sub);
+    margin:20px 0;
+}
+
+/* BUTTONS */
+.btn {
+    border:1px solid var(--border);
+    padding:10px 20px;
+    margin-right:10px;
+    text-decoration:none;
+    color:white;
+    transition:0.3s;
+}
+
+.btn:hover {
+    background:white;
+    color:black;
+}
+
+/* IMAGE */
+.image-container {
+    width:300px;
+    height:380px;
+    overflow:hidden;
+    border-radius:15px;
+}
+
+.profile-img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:0.4s;
+}
+
+.image-container:hover img {
+    transform:scale(1.05);
+}
+
+/* GLOW */
+.glow-bg {
+    position:absolute;
+    width:350px;
+    height:350px;
+    background: radial-gradient(circle, rgba(100,100,255,0.3), transparent);
+    filter:blur(60px);
+    z-index:-1;
+}
+
+/* ABOUT */
+.about-section {
+    text-align:center;
+    margin-top:80px;
+}
+
+.about-grid {
+    display:flex;
+    gap:20px;
+    justify-content:center;
+    margin-top:20px;
+}
+
+.about-grid div {
+    border:1px solid var(--border);
+    padding:20px;
+    border-radius:10px;
+}
+
+/* ANIMATIONS */
+.animate-up {
+    opacity:0;
+    transform:translateY(20px);
+    animation:fadeUp 0.8s forwards;
+    animation-delay:var(--delay);
+}
+
+.animate-fade {
+    opacity:0;
+    animation:fadeIn 1s forwards;
+    animation-delay:var(--delay);
+}
+
+@keyframes fadeUp {
+    to {
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    to { opacity:1; }
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .hero{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .about-grid{
+        flex-direction:column;
+    }
+}
