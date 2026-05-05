@@ -1,138 +1,159 @@
 :root {
-    --bg: #0b0b0b;
-    --text: #ffffff;
-    --sub: #94a3b8;
-    --border: rgba(255,255,255,0.15);
+  --bg: #0b0b0b;
+  --text: #ffffff;
+  --sub: #94a3b8;
+  --border: rgba(255,255,255,0.15);
 }
 
-/* RESET */
 * {
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family:'Inter', sans-serif;
-    background: var(--bg);
-    color: var(--text);
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
 }
 
 /* HERO */
 .hero {
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:80px;
-    gap:60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 120px 80px;
+  gap: 80px;
+  min-height: 100vh;
 }
 
 /* TEXT */
+.hero-content {
+  max-width: 520px;
+}
+
+.greeting {
+  color: var(--sub);
+  font-size: 1rem;
+}
+
 .name {
-    font-size:3rem;
+  font-size: 4rem;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  margin: 10px 0;
+  background: linear-gradient(to right, #fff, #888);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dynamic-text-container {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  height: 30px;
 }
 
 .tagline {
-    color:var(--sub);
-    margin:20px 0;
+  color: var(--sub);
+  margin-bottom: 30px;
+  line-height: 1.6;
 }
 
 /* BUTTONS */
 .btn {
-    border:1px solid var(--border);
-    padding:10px 20px;
-    margin-right:10px;
-    text-decoration:none;
-    color:white;
-    transition:0.3s;
+  border: 1px solid var(--border);
+  padding: 12px 22px;
+  border-radius: 12px;
+  margin-right: 10px;
+  text-decoration: none;
+  color: white;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
 }
 
 .btn:hover {
-    background:white;
-    color:black;
+  background: white;
+  color: black;
+  transform: translateY(-2px);
 }
 
 /* IMAGE */
-.image-container {
-    width:300px;
-    height:380px;
-    overflow:hidden;
-    border-radius:15px;
+.hero-image-wrapper {
+  position: relative;
 }
 
-.profile-img {
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    transition:0.4s;
-}
-
-.image-container:hover img {
-    transform:scale(1.05);
-}
-
-/* GLOW */
 .glow-bg {
-    position:absolute;
-    width:350px;
-    height:350px;
-    background: radial-gradient(circle, rgba(100,100,255,0.3), transparent);
-    filter:blur(60px);
-    z-index:-1;
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(120, 80, 255, 0.35), transparent);
+  filter: blur(100px);
+  z-index: -1;
 }
 
-/* ABOUT */
-.about-section {
-    text-align:center;
-    margin-top:80px;
+.image-container {
+  width: 320px;
+  height: 380px;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: 0.4s;
 }
 
-.about-grid {
-    display:flex;
-    gap:20px;
-    justify-content:center;
-    margin-top:20px;
+/* FACE ONLY */
+.profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  transform: scale(1.5);
+  transition: 0.6s;
+  filter: brightness(0.95);
 }
 
-.about-grid div {
-    border:1px solid var(--border);
-    padding:20px;
-    border-radius:10px;
+.image-container:hover .profile-img {
+  transform: scale(1.6);
 }
 
 /* ANIMATIONS */
 .animate-up {
-    opacity:0;
-    transform:translateY(20px);
-    animation:fadeUp 0.8s forwards;
-    animation-delay:var(--delay);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s ease forwards;
+  animation-delay: var(--delay);
 }
 
 .animate-fade {
-    opacity:0;
-    animation:fadeIn 1s forwards;
-    animation-delay:var(--delay);
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+  animation-delay: var(--delay);
 }
 
 @keyframes fadeUp {
-    to {
-        opacity:1;
-        transform:translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeIn {
-    to { opacity:1; }
+  to { opacity: 1; }
 }
 
 /* MOBILE */
 @media(max-width:768px){
-    .hero{
-        flex-direction:column;
-        text-align:center;
-    }
+  .hero{
+    flex-direction: column-reverse;
+    text-align: center;
+    padding: 80px 20px;
+  }
 
-    .about-grid{
-        flex-direction:column;
-    }
+  .name {
+    font-size: 2.8rem;
+  }
+
+  .image-container {
+    width: 250px;
+    height: 300px;
+  }
 }
