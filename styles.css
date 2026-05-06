@@ -171,3 +171,7 @@ body {
   position: absolute;
   z-index: 1;
 }
+
+body {
+  height: 200vh; /* enable scroll */
+}
