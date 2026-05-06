@@ -1,102 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Ujwal Doijode</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ujwal Doijode</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
-
 <body>
 
-<main class="hero">
+  <!-- Cursor Glow -->
+  <div class="cursor-glow"></div>
 
-    <!-- LEFT -->
-    <div class="hero-content">
+  <!-- Main Container -->
+  <main class="container">
 
-        <p class="greeting animate-up" style="--delay:0.1s">
-            Hi, I’m
-        </p>
+    <!-- Left Content -->
+    <section class="content">
+      <p class="intro">Hi, I’m</p>
 
-        <h1 class="name animate-up" style="--delay:0.2s">
-            Ujwal Doijode
-        </h1>
+      <h1 class="name">
+        Ujwal Doijode
+      </h1>
 
-        <div class="dynamic-text-container animate-up" style="--delay:0.3s">
-            <span id="dynamic-text"></span>
-            <span class="cursor">|</span>
-        </div>
+      <h2 class="typing" id="typing"></h2>
 
-        <p class="tagline animate-up" style="--delay:0.4s">
-            Building AI systems, scalable backend platforms, and high-performance web apps.
-        </p>
+      <p class="tagline">
+        Building AI systems, scalable backend platforms, and high-performance web apps.
+      </p>
 
-        <!-- STATUS (this adds personality) -->
-        <p class="status animate-up" style="--delay:0.45s">
-            Currently building & learning 🚀
-        </p>
+      <div class="buttons">
+        <button class="btn primary">View Work</button>
+        <button class="btn secondary">Contact</button>
+      </div>
+    </section>
 
-        <!-- BUTTONS -->
-        <div class="cta-group animate-up" style="--delay:0.5s">
-            <a href="https://github.com/your-username" target="_blank" class="btn">GitHub</a>
-            <a href="https://linkedin.com/in/your-profile" target="_blank" class="btn">LinkedIn</a>
-            <a href="#" class="btn">Resume</a>
-        </div>
+    <!-- Profile Image -->
+    <section class="image-container">
+      <div class="image-glow"></div>
+      <img src="profile.jpg" alt="Profile" class="profile" />
+    </section>
 
-    </div>
+  </main>
 
-    <!-- RIGHT IMAGE -->
-    <div class="hero-image-wrapper animate-fade" style="--delay:0.6s">
-
-        <div class="glow-bg"></div>
-
-        <div class="image-container" id="tilt-box">
-            <img src="profile.jpg" class="profile-img" />
-        </div>
-
-    </div>
-
-</main>
-
-<!-- DIVIDER (important visual separation) -->
-<div class="divider"></div>
-
-<!-- ABOUT -->
-<section class="about-section">
-
-    <h2>About</h2>
-
-    <p>
-        Software Engineer at OpenText building AI-driven systems, scalable backend platforms,
-        and high-performance applications.
-    </p>
-
-    <div class="about-grid">
-
-        <div>
-            <h4>Education</h4>
-            <p>The National Institute of Engineering</p>
-            <span>B.Tech ECE • CGPA 8.9</span>
-        </div>
-
-        <div>
-            <h4>Experience</h4>
-            <p>Software Engineer @ OpenText</p>
-            <span>AI Systems • Full Stack • Enterprise Apps</span>
-        </div>
-
-        <div>
-            <h4>Skills</h4>
-            <span>JavaScript • Java • Python • React • AI/LLM</span>
-        </div>
-
-    </div>
-
-</section>
-
-<script src="script.js"></script>
-
+  <script src="script.js"></script>
 </body>
 </html>
