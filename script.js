@@ -1,305 +1,411 @@
-/* ══════════════════════════════════════════
-   script.js — Ujwal Doijode Portfolio v2
-══════════════════════════════════════════ */
-(function(){
+/* ═══════════════════════════════════════════
+   script.js — Ujwal Doijode Portfolio v3
+   Full cinematic experience. Zero dependencies.
+═══════════════════════════════════════════ */
+(function () {
 'use strict';
 
-/* ─────────────────────────────────────
-   MARQUEE ITEMS
-───────────────────────────────────── */
-const MARQUEE_ITEMS = [
-  { label:'Python',   icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
-  { label:'LangChain',icon:null, emoji:'🦜' },
-  { label:'FastAPI',  icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg' },
-  { label:'Java',     icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
-  { label:'Spring Boot',icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg'},
-  { label:'JavaScript',icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg'},
-  { label:'Go',       icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg' },
-  { label:'Docker',   icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg' },
-  { label:'Kubernetes',icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg'},
-  { label:'PostgreSQL',icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg'},
-  { label:'AWS',      icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg'},
-  { label:'Prometheus',icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prometheus/prometheus-original.svg'},
-  { label:'Grafana',  icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grafana/grafana-original.svg'},
-  { label:'LangGraph',icon:null,emoji:'🕸'},
-  { label:'Vector DB',icon:null,emoji:'📊'},
-  { label:'Agentic AI',icon:null,emoji:'⚡'},
-  { label:'LangSmith',icon:null,emoji:'🔭'},
-];
+/* ─────────────────────────────────────────
+   1. LOADER
+───────────────────────────────────────── */
+const loader  = document.getElementById('loader');
+const ldNum   = document.getElementById('ld-num');
+const ldFill  = document.getElementById('ld-fill');
 
-function buildMarquee(){
-  const track = document.getElementById('marquee');
-  if(!track) return;
-  // Build twice for seamless loop
-  const makeSet = () => {
-    let html = '';
-    MARQUEE_ITEMS.forEach((item, i) => {
-      if(i > 0) html += `<span class="m-sep">·</span>`;
-      html += `<div class="m-item">`;
-      if(item.icon){
-        html += `<img src="${item.icon}" alt="${item.label}" loading="lazy">`;
-      } else {
-        html += `<span style="font-size:1.1rem">${item.emoji}</span>`;
-      }
-      html += `<span>${item.label}</span></div>`;
-    });
-    return html;
-  };
-  // duplicate for seamless scroll
-  track.innerHTML = makeSet() + '<span class="m-sep" style="margin:0 24px">·</span>' + makeSet();
-}
-buildMarquee();
-
-
-/* ─────────────────────────────────────
-   LOADER
-───────────────────────────────────── */
-const loader    = document.getElementById('loader');
-const loaderNum = document.getElementById('loader-num');
-const loaderBar = document.getElementById('loader-bar');
-
-let progress = 0;
-const tick = setInterval(() => {
-  const remaining = 100 - progress;
-  progress = Math.min(100, progress + Math.max(0.5, remaining * 0.042 + Math.random() * 1.4));
-
-  loaderNum.textContent = Math.floor(progress);
-  loaderBar.style.width = progress + '%';
-
-  if(progress >= 100){
-    clearInterval(tick);
-    loaderNum.textContent = '100';
-    loaderBar.style.width = '100%';
-    setTimeout(finishLoad, 450);
+let prog = 0;
+const loadTick = setInterval(() => {
+  const rem = 100 - prog;
+  prog = Math.min(100, prog + Math.max(0.4, rem * 0.04 + Math.random() * 1.6));
+  ldNum.textContent = Math.floor(prog);
+  ldFill.style.width = prog + '%';
+  if (prog >= 100) {
+    clearInterval(loadTick);
+    ldNum.textContent = '100';
+    ldFill.style.width = '100%';
+    setTimeout(onLoaded, 440);
   }
 }, 28);
 
-function finishLoad(){
+function onLoaded() {
   loader.classList.add('out');
   document.body.classList.add('loaded');
   revealHero();
+  startParticles();
+  startTyping();
 }
 
+/* ─────────────────────────────────────────
+   2. HERO ENTRANCE — image drops in from
+      straight (scale + blur only, no X drift)
+───────────────────────────────────────── */
+const imgWrap = document.getElementById('img-wrap');
+const heroCopy = document.getElementById('hero-copy');
+const scrlEl   = document.getElementById('scrl');
 
-/* ─────────────────────────────────────
-   HERO REVEAL
-───────────────────────────────────── */
-function revealHero(){
-  // Photo entrance
-  const photoScene = document.getElementById('photo-scene');
-  photoScene.style.cssText = `
-    opacity:0;
-    filter:blur(14px) saturate(0.3);
-    transform:translateX(-50%) scale(1.12) translateY(30px);
-    transition:opacity 1.4s cubic-bezier(0.16,1,0.3,1),
-               filter 1.3s cubic-bezier(0.16,1,0.3,1),
-               transform 1.5s cubic-bezier(0.16,1,0.3,1);
+function revealHero() {
+  /* Set initial state via JS so CSS doesn't fight it */
+  imgWrap.style.cssText = `
+    opacity: 0;
+    filter: blur(18px) brightness(0.4) saturate(0.2);
+    transform: translateX(-50%) scaleY(0.88) scaleX(0.94);
+    transition:
+      opacity 1.5s cubic-bezier(0.16,1,0.3,1),
+      filter 1.4s cubic-bezier(0.16,1,0.3,1),
+      transform 1.5s cubic-bezier(0.16,1,0.3,1);
   `;
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    setTimeout(()=>{
-      photoScene.style.opacity   = '1';
-      photoScene.style.filter    = 'blur(0) saturate(1)';
-      photoScene.style.transform = 'translateX(-50%) scale(1) translateY(0)';
-    }, 100);
+
+  /* next frame: animate to final */
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    setTimeout(() => {
+      imgWrap.style.opacity   = '1';
+      imgWrap.style.filter    = 'blur(0px) brightness(1) saturate(1)';
+      imgWrap.style.transform = 'translateX(-50%) scaleY(1) scaleX(1)';
+    }, 80);
   }));
 
-  // Text stagger
-  ['r0','r1','r2','r3','r4'].forEach(cls=>{
-    document.querySelectorAll('.'+cls).forEach(el=>{
-      setTimeout(()=>el.classList.add('vis'), 200);
-    });
+  /* Flank letters */
+  const letters = document.querySelectorAll('.flank span');
+  letters.forEach((el, i) => {
+    setTimeout(() => el.classList.add('vis'), 350 + i * 60);
   });
-  setTimeout(()=>{
-    const sc = document.getElementById('scroll-cue');
-    if(sc) sc.classList.add('vis');
-  }, 1100);
 
-  // Start typing
-  setTimeout(startTyping, 650);
+  /* Copy overlay */
+  [heroCopy, scrlEl].forEach((el, i) => {
+    if (!el) return;
+    el.classList.add('hero-r');
+    setTimeout(() => el.classList.add('vis'), 700 + i * 200);
+  });
 }
 
+/* ─────────────────────────────────────────
+   3. PARTICLE SYSTEM
+      Floating purple/blue orbs that drift
+      They feel alive and organic
+───────────────────────────────────────── */
+const canvas = document.getElementById('ptcl');
+const ctx    = canvas.getContext('2d');
+let ptcls    = [];
+let W, H;
 
-/* ─────────────────────────────────────
-   TYPING
-───────────────────────────────────── */
-const ROLES = ['AI Engineer', 'Full Stack Developer', 'Builder', 'LLM Systems Designer'];
-const typEl = document.getElementById('typed');
-let ri=0, ci=0, del=false;
+function resizeCanvas() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
 
-function startTyping(){ typeLoop(); }
-function typeLoop(){
+function rnd(a, b) { return a + Math.random() * (b - a); }
+
+class Particle {
+  constructor() { this.reset(true); }
+  reset(init) {
+    this.x    = rnd(0, W);
+    this.y    = init ? rnd(0, H) : H + 10;
+    this.r    = rnd(1, 3.5);
+    this.vx   = rnd(-0.18, 0.18);
+    this.vy   = rnd(-0.55, -0.15);
+    this.life = 0;
+    this.maxLife = rnd(180, 380);
+    /* alternate violet / blue / white */
+    const palette = [
+      [139, 111, 255],
+      [91,  158, 255],
+      [180, 160, 255],
+      [255, 255, 255],
+    ];
+    this.rgb = palette[Math.floor(Math.random() * palette.length)];
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.life++;
+    if (this.life > this.maxLife || this.y < -10) this.reset(false);
+  }
+  draw() {
+    const alpha = Math.sin((this.life / this.maxLife) * Math.PI) * 0.6;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${this.rgb[0]},${this.rgb[1]},${this.rgb[2]},${alpha})`;
+    ctx.shadowBlur  = 8;
+    ctx.shadowColor = `rgba(${this.rgb[0]},${this.rgb[1]},${this.rgb[2]},0.5)`;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+}
+
+/* Larger, slow nebula blobs */
+class Nebula {
+  constructor() { this.reset(true); }
+  reset(init) {
+    this.x    = rnd(W * 0.2, W * 0.8);
+    this.y    = init ? rnd(0, H) : H + 200;
+    this.r    = rnd(60, 140);
+    this.vx   = rnd(-0.06, 0.06);
+    this.vy   = rnd(-0.12, -0.04);
+    this.life = 0;
+    this.maxLife = rnd(300, 600);
+    this.hue  = Math.random() > 0.5 ? [139,111,255] : [91,158,255];
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.life++;
+    if (this.life > this.maxLife || this.y < -200) this.reset(false);
+  }
+  draw() {
+    const alpha = Math.sin((this.life / this.maxLife) * Math.PI) * 0.06;
+    const grd = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r);
+    grd.addColorStop(0, `rgba(${this.hue[0]},${this.hue[1]},${this.hue[2]},${alpha})`);
+    grd.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = grd;
+    ctx.fill();
+  }
+}
+
+let animRunning = false;
+
+function startParticles() {
+  if (animRunning) return;
+  animRunning = true;
+  ptcls = [
+    ...Array.from({length: 55}, () => new Particle()),
+    ...Array.from({length: 8},  () => new Nebula()),
+  ];
+  animLoop();
+}
+
+function animLoop() {
+  ctx.clearRect(0, 0, W, H);
+  ptcls.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animLoop);
+}
+
+/* ─────────────────────────────────────────
+   4. TYPING ANIMATION
+───────────────────────────────────────── */
+const ROLES  = ['AI Engineer', 'Full Stack Developer', 'Builder', 'LLM Systems Designer'];
+const typEl  = document.getElementById('typed');
+let ri = 0, ci = 0, deleting = false;
+
+function startTyping() { typeStep(); }
+
+function typeStep() {
   const word = ROLES[ri];
-  if(!del){
-    typEl.textContent = word.slice(0, ci+1);
+  if (!deleting) {
+    typEl.textContent = word.slice(0, ci + 1);
     ci++;
-    if(ci === word.length){ del=true; setTimeout(typeLoop, 1800); return; }
+    if (ci === word.length) { deleting = true; setTimeout(typeStep, 1900); return; }
   } else {
-    typEl.textContent = word.slice(0, ci-1);
+    typEl.textContent = word.slice(0, ci - 1);
     ci--;
-    if(ci===0){ del=false; ri=(ri+1)%ROLES.length; setTimeout(typeLoop,380); return; }
+    if (ci === 0) { deleting = false; ri = (ri + 1) % ROLES.length; setTimeout(typeStep, 350); return; }
   }
-  setTimeout(typeLoop, del ? 50 : 88 + Math.random()*28);
+  setTimeout(typeStep, deleting ? 48 : 90 + Math.random() * 26);
 }
 
+/* ─────────────────────────────────────────
+   5. CUSTOM CURSOR
+───────────────────────────────────────── */
+const cDot  = document.getElementById('cur-dot');
+const cRing = document.getElementById('cur-ring');
+const cGlow = document.getElementById('cur-glow');
 
-/* ─────────────────────────────────────
-   CUSTOM CURSOR
-───────────────────────────────────── */
-const curDot  = document.getElementById('cur-dot');
-const curRing = document.getElementById('cur-ring');
-const curGlow = document.getElementById('cur-glow');
+let mx = W / 2, my = window.innerHeight / 2;
+let rx = mx, ry = my;
 
-let mx=window.innerWidth/2, my=window.innerHeight/2;
-let rx=mx, ry=my;
-
-document.addEventListener('mousemove', e=>{
-  mx=e.clientX; my=e.clientY;
-  curDot.style.left  = mx+'px';
-  curDot.style.top   = my+'px';
-  curGlow.style.left = mx+'px';
-  curGlow.style.top  = my+'px';
-  curGlow.style.opacity='1';
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cDot.style.left = mx + 'px'; cDot.style.top = my + 'px';
+  cGlow.style.left = mx + 'px'; cGlow.style.top = my + 'px';
+  cGlow.style.opacity = '1';
 });
-document.addEventListener('mouseleave',()=>curGlow.style.opacity='0');
+document.addEventListener('mouseleave', () => cGlow.style.opacity = '0');
 
-(function ringRAF(){
-  rx += (mx-rx)*0.1;
-  ry += (my-ry)*0.1;
-  curRing.style.left = rx+'px';
-  curRing.style.top  = ry+'px';
-  requestAnimationFrame(ringRAF);
+(function ringLoop() {
+  rx += (mx - rx) * 0.1;
+  ry += (my - ry) * 0.1;
+  cRing.style.left = rx + 'px';
+  cRing.style.top  = ry + 'px';
+  requestAnimationFrame(ringLoop);
 })();
 
-document.querySelectorAll('a, .btn-p, .btn-g, .ft-btn').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{
-    curDot.style.width='12px'; curDot.style.height='12px';
-    curDot.style.background='var(--v2)';
-    curRing.style.width='52px'; curRing.style.height='52px';
-    curRing.style.borderColor='rgba(94,156,250,0.7)';
+document.querySelectorAll('a, .btn-p, .btn-g, .ski').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cDot.style.width  = '12px'; cDot.style.height = '12px';
+    cDot.style.background = 'var(--v2)';
+    cRing.style.width = '54px'; cRing.style.height = '54px';
+    cRing.style.borderColor = 'rgba(91,158,255,0.7)';
   });
-  el.addEventListener('mouseleave',()=>{
-    curDot.style.width='6px'; curDot.style.height='6px';
-    curDot.style.background='var(--v1)';
-    curRing.style.width='32px'; curRing.style.height='32px';
-    curRing.style.borderColor='rgba(139,114,255,0.45)';
+  el.addEventListener('mouseleave', () => {
+    cDot.style.width  = '6px'; cDot.style.height = '6px';
+    cDot.style.background = 'var(--v1)';
+    cRing.style.width = '32px'; cRing.style.height = '32px';
+    cRing.style.borderColor = 'rgba(139,111,255,0.5)';
   });
 });
 
-
-/* ─────────────────────────────────────
-   NAV SCROLL STATE
-───────────────────────────────────── */
+/* ─────────────────────────────────────────
+   6. NAV SCROLL
+───────────────────────────────────────── */
 const nav = document.getElementById('nav');
-window.addEventListener('scroll',()=>{
-  nav.classList.toggle('scrolled', window.scrollY > 60);
-}, {passive:true});
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+}, { passive: true });
 
+/* ─────────────────────────────────────────
+   7. HERO SCROLL — CINEMATIC
+      Same mechanic as akshayiscoding.me:
+      As user scrolls #hero's 320vh range:
+      • Image: clip-path shrinks upward (reveals bg underneath)
+      • Image also slowly scales up (ken-burns zoom)
+      • Flank letters fade & spread outward
+      • Copy fades up
+      The key: clip-path inset(bottom%) cuts image from bottom
+      so it appears to "sink below the fold" cinematically.
+───────────────────────────────────────── */
+const heroSec  = document.getElementById('hero');
+const flankL   = document.getElementById('flank-l');
+const flankR   = document.getElementById('flank-r');
+const heroImg  = document.getElementById('hero-img');
 
-/* ─────────────────────────────────────
-   HERO SCROLL CINEMATIC
-───────────────────────────────────── */
-const heroSec   = document.getElementById('hero');
-const heroCopy  = document.getElementById('hero-copy');
-const photoSceneEl = document.getElementById('photo-scene');
-const photoGlow = document.getElementById('photo-glow');
-const scrollCue = document.getElementById('scroll-cue');
+let lastSY = 0, rafId = null;
 
-let lastSY=0, rafPending=false;
+function lerp(a, b, t) { return a + (b - a) * t; }
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+function ease(t) { return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2,2)/2; }
 
-function lerp(a,b,t){ return a+(b-a)*t; }
-
-function heroScroll(){
-  rafPending=false;
-  const heroH = heroSec.offsetHeight;
-  const vH    = window.innerHeight;
+function applyHeroScroll() {
+  rafId = null;
+  const heroH    = heroSec.offsetHeight;
+  const vH       = window.innerHeight;
   const scrollable = heroH - vH;
-  const raw = Math.min(Math.max(lastSY/scrollable, 0), 1);
-  // ease
-  const p = raw<.5 ? 2*raw*raw : 1-Math.pow(-2*raw+2,2)/2;
+  const rawP     = clamp(lastSY / scrollable, 0, 1);
+  const p        = ease(rawP);   /* eased 0→1 */
 
-  // Text fades & lifts
-  if(heroCopy){
-    heroCopy.style.opacity   = String(Math.max(0, 1-p*2.4));
-    heroCopy.style.transform = `translateY(${-p*70}px)`;
-  }
+  /* ── Image: clip from bottom (Akshay style) ──
+     inset(top right bottom left)
+     We clip the BOTTOM of the image as we scroll.
+     At p=0 → full image (inset 0% on all sides)
+     At p=1 → image fully clipped (inset 100% from top or bottom)
+     We go bottom→top clip so image looks like it "sinks"
+  */
+  const clipBottom = clamp(p * 110, 0, 100);        /* bottom clip grows 0→100% */
+  const clipTop    = 0;                               /* top stays 0 */
+  imgWrap.style.clipPath = `inset(${clipTop}% 0% ${clipBottom}% 0%)`;
 
-  // Scroll cue
-  if(scrollCue) scrollCue.style.opacity = String(Math.max(0, 1-p*5));
+  /* ── Image zoom (ken-burns) ── */
+  const scale = 1 + p * 0.22;
+  heroImg.style.transform = `scale(${scale})`;
 
-  // Photo: scale + shift up (cinematic reveal)
-  if(photoSceneEl){
-    const sc = 1 + p*0.45;
-    const up = -p*100;
-    photoSceneEl.style.transform = `translateX(-50%) scale(${sc}) translateY(${up}px)`;
-    photoSceneEl.style.filter    = `brightness(${1-p*0.4}) saturate(${1-p*0.3})`;
-  }
+  /* ── Copy: fade out & slide up ── */
+  const copyOp = clamp(1 - p * 3, 0, 1);
+  const copyTY = -p * 50;
+  heroCopy.style.opacity   = String(copyOp);
+  heroCopy.style.transform = `translateY(${copyTY}px)`;
 
-  // Glow intensifies
-  if(photoGlow){
-    photoGlow.style.opacity = String(1 + p*2);
-    photoGlow.style.transform = `translateX(-50%) scaleX(${1+p*0.7}) scaleY(${1+p*0.4})`;
-  }
+  /* ── Flank letters: spread out & fade ── */
+  const flankOp = clamp(1 - p * 2.5, 0, 1);
+  const flankX  = p * 40;
+  if (flankL) { flankL.style.opacity = String(flankOp); flankL.style.transform = `translateY(-52%) translateX(-${flankX}px)`; }
+  if (flankR) { flankR.style.opacity = String(flankOp); flankR.style.transform = `translateY(-52%) translateX(${flankX}px)`; }
+
+  /* ── Scroll cue ── */
+  if (scrlEl) scrlEl.style.opacity = String(clamp(1 - p * 6, 0, 1));
 }
 
-window.addEventListener('scroll',()=>{
-  lastSY=window.scrollY;
-  if(!rafPending){ rafPending=true; requestAnimationFrame(heroScroll); }
-},{passive:true});
+window.addEventListener('scroll', () => {
+  lastSY = window.scrollY;
+  if (!rafId) rafId = requestAnimationFrame(applyHeroScroll);
+}, { passive: true });
 
+/* ─────────────────────────────────────────
+   8. IMAGE 3D TILT on mouse move
+      Only active when hero is visible
+───────────────────────────────────────── */
+let tiltX = 0, tiltY = 0;
+let tTX = 0, tTY = 0;
 
-/* ─────────────────────────────────────
-   PHOTO 3D TILT
-───────────────────────────────────── */
-const tiltEl = document.getElementById('photo-tilt');
-let tx=0,ty=0, ttx=0,tty=0;
-
-document.addEventListener('mousemove',e=>{
-  const cx=window.innerWidth/2, cy=window.innerHeight/2;
-  const dx=(e.clientX-cx)/(window.innerWidth/2);
-  const dy=(e.clientY-cy)/(window.innerHeight/2);
-  ttx = dy * -7;
-  tty = dx *  7;
+document.addEventListener('mousemove', e => {
+  if (lastSY > window.innerHeight * 0.3) { tTX = 0; tTY = 0; return; }
+  const cx = window.innerWidth  / 2;
+  const cy = window.innerHeight / 2;
+  tTX = ((e.clientY - cy) / cy) * -5;
+  tTY = ((e.clientX - cx) / cx) *  5;
 });
-document.addEventListener('mouseleave',()=>{ ttx=0; tty=0; });
 
-(function tiltRAF(){
-  tx += (ttx-tx)*0.065;
-  ty += (tty-ty)*0.065;
-  if(lastSY < window.innerHeight*0.4 && tiltEl){
-    tiltEl.style.transform = `perspective(900px) rotateX(${tx}deg) rotateY(${ty}deg)`;
-  } else if(tiltEl){
-    tiltEl.style.transform = 'perspective(900px) rotateX(0) rotateY(0)';
+(function tiltLoop() {
+  tiltX += (tTX - tiltX) * 0.06;
+  tiltY += (tTY - tiltY) * 0.06;
+  if (heroImg && lastSY < window.innerHeight * 0.4) {
+    heroImg.style.transform = `scale(${1 + (lastSY / (heroSec.offsetHeight - window.innerHeight)) * 0.22})
+      perspective(900px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
   }
-  requestAnimationFrame(tiltRAF);
+  requestAnimationFrame(tiltLoop);
 })();
 
+/* ─────────────────────────────────────────
+   9. MARQUEE BUILD
+───────────────────────────────────────── */
+const MQ_ITEMS = [
+  { label: 'Python',      img: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
+  { label: 'LangChain',   emoji: '🦜' },
+  { label: 'FastAPI',     img: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg' },
+  { label: 'Java',        img: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
+  { label: 'Spring Boot', img: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg' },
+  { label: 'JavaScript',  img: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' },
+  { label: 'Go',          img: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg' },
+  { label: 'Docker',      img: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg' },
+  { label: 'Kubernetes',  img: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg' },
+  { label: 'PostgreSQL',  img: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg' },
+  { label: 'AWS',         img: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg' },
+  { label: 'Prometheus',  img: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prometheus/prometheus-original.svg' },
+  { label: 'LangGraph',   emoji: '🕸' },
+  { label: 'Vector DB',   emoji: '📊' },
+  { label: 'Agentic AI',  emoji: '⚡' },
+  { label: 'LangSmith',   emoji: '🔭' },
+];
 
-/* ─────────────────────────────────────
-   SCROLL REVEAL (IntersectionObserver)
-───────────────────────────────────── */
-const io = new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      e.target.classList.add('vis');
-      io.unobserve(e.target);
-    }
+function buildMarquee() {
+  const track = document.getElementById('mq');
+  if (!track) return;
+
+  const makeSet = () => MQ_ITEMS.map((item, i) => {
+    const icon = item.img
+      ? `<img src="${item.img}" alt="${item.label}" loading="lazy">`
+      : `<span class="mq-e">${item.emoji}</span>`;
+    const sep = i > 0 ? '<span class="mq-sep">·</span>' : '';
+    return `${sep}<div class="mq-item">${icon}<span>${item.label}</span></div>`;
+  }).join('');
+
+  // Duplicate for seamless loop
+  track.innerHTML = makeSet() + '<span class="mq-sep" style="margin:0 20px">·</span>' + makeSet();
+}
+buildMarquee();
+
+/* ─────────────────────────────────────────
+   10. SCROLL REVEAL (IntersectionObserver)
+───────────────────────────────────────── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); }
   });
-},{threshold:0.1, rootMargin:'0px 0px -30px 0px'});
+}, { threshold: 0.08, rootMargin: '0px 0px -24px 0px' });
 
-document.querySelectorAll('.rs').forEach(el=>io.observe(el));
+document.querySelectorAll('.rs').forEach(el => io.observe(el));
 
-
-/* ─────────────────────────────────────
-   PROJECT CARD MOUSE GLOW
-───────────────────────────────────── */
-document.querySelectorAll('.proj-card').forEach(card=>{
-  card.addEventListener('mousemove',e=>{
-    const r=card.getBoundingClientRect();
-    const x=((e.clientX-r.left)/r.width)*100;
-    const y=((e.clientY-r.top)/r.height)*100;
-    card.style.backgroundImage=`radial-gradient(circle at ${x}% ${y}%,rgba(139,114,255,0.05) 0%,transparent 55%)`;
+/* ─────────────────────────────────────────
+   11. PROJECT CARD MOUSE GLOW
+───────────────────────────────────────── */
+document.querySelectorAll('.pc').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width)  * 100;
+    const y = ((e.clientY - r.top)  / r.height) * 100;
+    card.style.backgroundImage = `radial-gradient(circle at ${x}% ${y}%, rgba(139,111,255,0.055) 0%, transparent 52%)`;
   });
-  card.addEventListener('mouseleave',()=>card.style.backgroundImage='');
+  card.addEventListener('mouseleave', () => card.style.backgroundImage = '');
 });
 
 })();
