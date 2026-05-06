@@ -3,208 +3,305 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ujwal Doijode — AI Engineer</title>
+  <title>Ujwal K Doijode — AI Engineer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Clash+Display:wght@400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <!-- ─────────────── LOADER ─────────────── -->
+  <!-- ══ LOADER ══ -->
   <div id="loader">
-    <div class="loader-inner">
+    <div class="loader-name">Ujwal.</div>
+    <div class="loader-bottom">
       <div class="loader-label">Loading Experience</div>
-      <div class="loader-percent"><span id="loader-num">0</span><span class="pct">%</span></div>
-      <div class="loader-bar-track">
-        <div class="loader-bar-fill" id="loader-bar"></div>
-      </div>
+      <div class="loader-pct"><span id="loader-num">0</span>%</div>
+      <div class="loader-track"><div class="loader-fill" id="loader-bar"></div></div>
     </div>
   </div>
 
-  <!-- ─────────────── CURSOR SPOTLIGHT ─────────────── -->
-  <div id="cursor-glow"></div>
+  <!-- ══ CURSOR ══ -->
+  <div id="cur-dot"></div>
+  <div id="cur-ring"></div>
+  <div id="cur-glow"></div>
 
-  <!-- ─────────────── HERO ─────────────── -->
+  <!-- ══ NAV ══ -->
+  <nav id="nav">
+    <div class="nav-logo">Ujwal.</div>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="https://drive.google.com/drive/folders/1ykmNU4GNyaDHZwU9pSG7kbeBnA8T7ddv" target="_blank" class="nav-resume">Résumé ↗</a>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════
+       HERO — pinned scroll scene
+  ════════════════════════════════════════════ -->
   <section id="hero">
 
-    <!-- Background ambient blobs -->
-    <div class="hero-bg">
-      <div class="blob blob-1"></div>
-      <div class="blob blob-2"></div>
-      <div class="blob blob-3"></div>
-    </div>
+    <!-- ambient blobs -->
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
 
-    <!-- Sticky scroll container -->
-    <div id="hero-sticky">
+    <div id="hero-pin">
 
-      <!-- Text layer -->
-      <div id="hero-text" class="hero-text">
-        <div class="hi-line reveal-item">Hi, I'm</div>
-        <h1 class="name-line reveal-item">
-          <span class="name-gradient">Ujwal</span>
-          <span class="name-gradient">Doijode</span>
+      <!-- PHOTO — dominant, fills most of viewport -->
+      <div id="photo-scene">
+        <div id="photo-glow"></div>
+        <div id="photo-tilt">
+          <img src="profile.jpg" alt="Ujwal Doijode" id="photo-img" />
+          <div class="photo-fade-bottom"></div>
+          <div class="photo-fade-sides"></div>
+        </div>
+      </div>
+
+      <!-- TEXT — overlaid on photo -->
+      <div id="hero-copy">
+        <div class="hero-hi r0">Hi, I'm</div>
+        <h1 class="hero-name r1">
+          <span>Ujwal</span>
+          <span>Doijode</span>
         </h1>
-        <div class="typing-wrapper reveal-item">
-          <span id="typing-text"></span><span class="cursor-blink">|</span>
+        <div class="hero-role r2">
+          <span id="typed"></span><span class="tblink">|</span>
         </div>
-        <p class="tagline reveal-item">
-          Building AI systems, scalable backend platforms,<br>and high-performance web applications.
+        <p class="hero-tag r3">
+          Building AI systems · Scalable backends · High-performance web
         </p>
-
-        <!-- CTA buttons -->
-        <div class="cta-row reveal-item">
-          <a href="https://github.com/UjwalDoijode" target="_blank" rel="noopener" class="btn btn-primary">
-            <span>View Work</span>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-          <a href="https://www.linkedin.com/in/ujwal-k-doijode-7903a7205" target="_blank" rel="noopener" class="btn btn-ghost">
-            <span>Contact</span>
-          </a>
-          <a href="https://drive.google.com/drive/folders/1ykmNU4GNyaDHZwU9pSG7kbeBnA8T7ddv" target="_blank" rel="noopener" class="btn btn-ghost">
-            <span>Résumé</span>
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7L7 12L12 7M7 1V12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
+        <div class="hero-btns r4">
+          <a href="#work" class="btn-p">View Work</a>
+          <a href="https://github.com/UjwalDoijode" target="_blank" class="btn-g">GitHub ↗</a>
+          <a href="https://www.linkedin.com/in/ujwal-k-doijode-7903a7205" target="_blank" class="btn-g">LinkedIn ↗</a>
         </div>
       </div>
 
-      <!-- Profile image layer -->
-      <div id="hero-image-wrap">
-        <div id="hero-glow-ring"></div>
-        <div id="hero-img-tilt">
-          <img src="profile.jpg" alt="Ujwal Doijode" id="profile-img" />
-          <div class="img-overlay-gradient"></div>
-        </div>
-      </div>
-
-      <!-- Scroll hint -->
-      <div id="scroll-hint" class="reveal-item">
-        <span>Scroll</span>
-        <div class="scroll-line"></div>
-      </div>
-
-    </div><!-- /hero-sticky -->
+      <div id="scroll-cue"><div class="sc-line"></div><span>scroll</span></div>
+    </div>
   </section>
 
-  <!-- ─────────────── PROJECTS ─────────────── -->
-  <section id="projects">
+  <!-- ══════════════════════════════════════════
+       MARQUEE — tech stack logos (no gap filler)
+  ════════════════════════════════════════════ -->
+  <div id="marquee-wrap">
+    <div class="marquee-track" id="marquee">
+      <!-- duplicated for infinite loop -->
+    </div>
+  </div>
 
-    <div class="section-label reveal-scroll">Featured Project</div>
+  <!-- ══════════════════════════════════════════
+       WORK / PROJECTS
+  ════════════════════════════════════════════ -->
+  <section id="work">
+    <div class="sec-eyebrow rs">Selected Work</div>
+    <h2 class="sec-title rs">Projects that<br><em>matter.</em></h2>
 
-    <!-- Project card: PageIndex -->
-    <article class="project-card reveal-scroll" data-index="0">
-      <div class="project-meta">
-        <span class="project-tag">AI · RAG · Backend</span>
-        <span class="project-year">2024</span>
-      </div>
-      <h2 class="project-title">PageIndex</h2>
-      <p class="project-subtitle">Agentic RAG Platform</p>
-      <p class="project-desc">
-        A next-generation document search system that uses AI reasoning instead of traditional
-        vector similarity. It navigates documents like a human — using structure instead of keywords —
-        delivering traceable, cited answers at scale.
-      </p>
-
-      <div class="project-highlights">
-        <div class="highlight-item">
-          <div class="h-dot"></div>
-          <span>Structure-aware retrieval — no embeddings required</span>
+    <!-- Project 1 -->
+    <article class="proj-card rs" data-delay="0">
+      <div class="proj-num">01</div>
+      <div class="proj-body">
+        <div class="proj-tags">
+          <span>AI · RAG · Backend</span>
+          <span>2024</span>
         </div>
-        <div class="highlight-item">
-          <div class="h-dot"></div>
-          <span>Multi-document intelligent search with reasoning tree</span>
-        </div>
-        <div class="highlight-item">
-          <div class="h-dot"></div>
-          <span>Kafka-based async indexing pipeline</span>
-        </div>
-        <div class="highlight-item">
-          <div class="h-dot"></div>
-          <span>Copilot-based LLM routing — zero API key overhead</span>
-        </div>
-        <div class="highlight-item">
-          <div class="h-dot"></div>
-          <span>Token optimization for production cost efficiency</span>
+        <h3 class="proj-name">Hybrid RAG System<br><span>with Reranking</span></h3>
+        <p class="proj-desc">
+          A production-grade RAG system combining BM25 sparse retrieval and dense vector
+          embeddings via Reciprocal Rank Fusion — then reranked by an LLM for relevance.
+          Improved response accuracy by <strong>30%</strong> over baseline vector-only retrieval.
+        </p>
+        <ul class="proj-bullets">
+          <li>BM25 + vector embeddings fused with RRF for top-10+ doc retrieval</li>
+          <li>LLM-based reranking layer for final response quality</li>
+          <li>Modular pipeline — swap any retriever or reranker without rewiring</li>
+        </ul>
+        <div class="proj-tech">
+          <span>Python</span><span>LangChain</span><span>LangGraph</span><span>Vector DB</span><span>FastAPI</span>
         </div>
       </div>
-
-      <div class="project-tech">
-        <span class="tech-pill">Python</span>
-        <span class="tech-pill">FastAPI</span>
-        <span class="tech-pill">Kafka</span>
-        <span class="tech-pill">LLM Routing</span>
-        <span class="tech-pill">RAG</span>
-        <span class="tech-pill">Tree Search</span>
-      </div>
-
-      <a href="https://github.com/UjwalDoijode" target="_blank" rel="noopener" class="project-link">
-        View on GitHub
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5.5M11.5 2.5V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
     </article>
 
-    <!-- Project card 2: Full Stack / AI App -->
-    <article class="project-card reveal-scroll" data-index="1">
-      <div class="project-meta">
-        <span class="project-tag">Full Stack · AI</span>
-        <span class="project-year">2024</span>
-      </div>
-      <h2 class="project-title">AI Engineering</h2>
-      <p class="project-subtitle">Scalable Backend Platforms</p>
-      <p class="project-desc">
-        High-performance web applications and AI-integrated backend systems built for scale.
-        From REST APIs to real-time data pipelines — engineered with precision and deployed for production.
-      </p>
-
-      <div class="project-highlights">
-        <div class="highlight-item">
-          <div class="h-dot"></div>
-          <span>Production-grade REST & async API design</span>
+    <!-- Project 2 -->
+    <article class="proj-card rs" data-delay="80">
+      <div class="proj-num">02</div>
+      <div class="proj-body">
+        <div class="proj-tags">
+          <span>Observability · LLMOps</span>
+          <span>2024</span>
         </div>
-        <div class="highlight-item">
-          <div class="h-dot"></div>
-          <span>LLM integration & prompt engineering</span>
-        </div>
-        <div class="highlight-item">
-          <div class="h-dot"></div>
-          <span>Real-time event streaming architectures</span>
-        </div>
-        <div class="highlight-item">
-          <div class="h-dot"></div>
-          <span>Full stack delivery — backend to deployment</span>
+        <h3 class="proj-name">AI Observability<br><span>Pipeline</span></h3>
+        <p class="proj-desc">
+          Lightweight observability layer for monitoring and debugging LLM-based agents in
+          production. Tracks every tool call, latency spike, and token expenditure across
+          multi-step workflows — cutting debugging time by <strong>35%</strong>.
+        </p>
+        <ul class="proj-bullets">
+          <li>Agent execution traces, tool call logs, and latency dashboards</li>
+          <li>Token usage monitoring across all workflow steps</li>
+          <li>LangSmith + Prometheus integration with Grafana visualization</li>
+        </ul>
+        <div class="proj-tech">
+          <span>Python</span><span>LangSmith</span><span>Prometheus</span><span>Grafana</span><span>LangGraph</span>
         </div>
       </div>
+    </article>
 
-      <div class="project-tech">
-        <span class="tech-pill">Node.js</span>
-        <span class="tech-pill">TypeScript</span>
-        <span class="tech-pill">PostgreSQL</span>
-        <span class="tech-pill">Redis</span>
-        <span class="tech-pill">Docker</span>
-        <span class="tech-pill">OpenAI API</span>
+    <!-- Project 3 -->
+    <article class="proj-card rs" data-delay="160">
+      <div class="proj-num">03</div>
+      <div class="proj-body">
+        <div class="proj-tags">
+          <span>Agentic AI · Enterprise</span>
+          <span>2023–Present</span>
+        </div>
+        <h3 class="proj-name">Agentic AI Platforms<br><span>@ OpenText</span></h3>
+        <p class="proj-desc">
+          Architected and shipped Agentic AI systems and ADT platforms at OpenText supporting
+          10+ enterprise workflows. Built reusable agent components, stateful multi-step
+          reasoning flows, and REST-optimized backends used by thousands of enterprise users.
+        </p>
+        <ul class="proj-bullets">
+          <li>LangChain + LangGraph multi-agent orchestration with modular tool abstractions</li>
+          <li>Microsoft 365 integration within Online Editing Services (OES)</li>
+          <li>Web Workers + long polling — cut UI blocking time by 55–60%</li>
+          <li>Observability with LangSmith + Prometheus; 30–40% faster debugging</li>
+        </ul>
+        <div class="proj-tech">
+          <span>LangChain</span><span>LangGraph</span><span>FastAPI</span><span>Spring Boot</span><span>Java</span><span>JS</span>
+        </div>
       </div>
-
-      <a href="https://github.com/UjwalDoijode" target="_blank" rel="noopener" class="project-link">
-        View on GitHub
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5.5M11.5 2.5V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
     </article>
 
   </section>
 
-  <!-- ─────────────── FOOTER ─────────────── -->
+  <!-- ══════════════════════════════════════════
+       EXPERIENCE
+  ════════════════════════════════════════════ -->
+  <section id="experience">
+    <div class="sec-eyebrow rs">Career</div>
+    <h2 class="sec-title rs">Where I've<br><em>built things.</em></h2>
+
+    <div class="exp-list">
+
+      <div class="exp-item rs">
+        <div class="exp-line-col">
+          <div class="exp-dot"></div>
+          <div class="exp-line"></div>
+        </div>
+        <div class="exp-content">
+          <div class="exp-period">Sep 2023 — Present</div>
+          <div class="exp-role">Software Engineer</div>
+          <div class="exp-company">OpenText <span class="exp-loc">· Bangalore</span></div>
+          <ul class="exp-bullets">
+            <li>Built Agentic AI systems using LangChain, LangGraph, FastAPI supporting 10+ enterprise workflows</li>
+            <li>Implemented observability with LangSmith + Prometheus — 30–40% faster debugging</li>
+            <li>Full-stack: Java, Spring Boot, JavaScript, Backbone.js, Marionette.js across enterprise modules</li>
+            <li>Web Workers + long polling reduced UI blocking time by 55–60%</li>
+            <li>Contributed to Online Editing Services (OES) with Microsoft 365 integration</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="exp-item rs" style="--ed:0.1s">
+        <div class="exp-line-col">
+          <div class="exp-dot"></div>
+          <div class="exp-line"></div>
+        </div>
+        <div class="exp-content">
+          <div class="exp-period">Feb 2023 — Aug 2023</div>
+          <div class="exp-role">Software Developer Intern</div>
+          <div class="exp-company">Microfocus (now OpenText) <span class="exp-loc">· Bangalore</span></div>
+          <ul class="exp-bullets">
+            <li>Developed and enhanced features in a Golang environment with focus on code optimization</li>
+            <li>Deployed product on embedded Kubernetes system using Docker — streamlined ops</li>
+            <li>Built AWS Lambda function to automate VM start/stop — significant cost savings</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SKILLS — logo grid
+  ════════════════════════════════════════════ -->
+  <section id="skills">
+    <div class="sec-eyebrow rs">Arsenal</div>
+    <h2 class="sec-title rs">Tech I build<br><em>with.</em></h2>
+
+    <div class="skills-grid rs">
+
+      <div class="skill-cat">
+        <div class="skill-cat-label">Languages</div>
+        <div class="skill-logos">
+          <div class="sl" title="Python"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python"><span>Python</span></div>
+          <div class="sl" title="JavaScript"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JS"><span>JavaScript</span></div>
+          <div class="sl" title="Java"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java"><span>Java</span></div>
+          <div class="sl" title="Go"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg" alt="Go"><span>Go</span></div>
+          <div class="sl" title="C++"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++"><span>C / C++</span></div>
+          <div class="sl" title="TypeScript"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TS"><span>TypeScript</span></div>
+        </div>
+      </div>
+
+      <div class="skill-cat">
+        <div class="skill-cat-label">Frameworks</div>
+        <div class="skill-logos">
+          <div class="sl" title="FastAPI"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="FastAPI"><span>FastAPI</span></div>
+          <div class="sl" title="Spring Boot"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" alt="Spring"><span>Spring Boot</span></div>
+          <div class="sl" title="Node.js"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node"><span>Node.js</span></div>
+          <div class="sl lang-chain" title="LangChain">
+            <div class="logo-text-badge">🦜</div><span>LangChain</span>
+          </div>
+          <div class="sl" title="React"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React"><span>React</span></div>
+        </div>
+      </div>
+
+      <div class="skill-cat">
+        <div class="skill-cat-label">Data & DevOps</div>
+        <div class="skill-logos">
+          <div class="sl" title="PostgreSQL"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL"><span>PostgreSQL</span></div>
+          <div class="sl" title="MySQL"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL"><span>MySQL</span></div>
+          <div class="sl" title="Docker"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker"><span>Docker</span></div>
+          <div class="sl" title="Kubernetes"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg" alt="K8s"><span>Kubernetes</span></div>
+          <div class="sl" title="AWS"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="AWS"><span>AWS</span></div>
+          <div class="sl" title="Git"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git"><span>Git</span></div>
+          <div class="sl" title="Prometheus"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prometheus/prometheus-original.svg" alt="Prometheus"><span>Prometheus</span></div>
+          <div class="sl" title="Grafana"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grafana/grafana-original.svg" alt="Grafana"><span>Grafana</span></div>
+        </div>
+      </div>
+
+      <div class="skill-cat">
+        <div class="skill-cat-label">AI / LLM</div>
+        <div class="skill-logos">
+          <div class="sl ai-pill"><div class="ai-badge">⚡</div><span>Agentic AI</span></div>
+          <div class="sl ai-pill"><div class="ai-badge">🔍</div><span>RAG Systems</span></div>
+          <div class="sl ai-pill"><div class="ai-badge">📊</div><span>Vector DBs</span></div>
+          <div class="sl ai-pill"><div class="ai-badge">🔭</div><span>LangSmith</span></div>
+          <div class="sl ai-pill"><div class="ai-badge">🕸</div><span>LangGraph</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       FOOTER / CTA
+  ════════════════════════════════════════════ -->
   <footer id="footer">
-    <div class="footer-inner reveal-scroll">
-      <div class="footer-name">Ujwal Doijode</div>
-      <p class="footer-sub">AI Engineer · Full Stack Developer · Builder</p>
-      <div class="footer-links">
-        <a href="https://github.com/UjwalDoijode" target="_blank" rel="noopener">GitHub</a>
-        <span class="footer-dot">·</span>
-        <a href="https://www.linkedin.com/in/ujwal-k-doijode-7903a7205" target="_blank" rel="noopener">LinkedIn</a>
-        <span class="footer-dot">·</span>
-        <a href="https://drive.google.com/drive/folders/1ykmNU4GNyaDHZwU9pSG7kbeBnA8T7ddv" target="_blank" rel="noopener">Résumé</a>
+    <div class="ft-bg-glow"></div>
+    <div class="ft-inner rs">
+      <div class="ft-eyebrow">Let's build together</div>
+      <h2 class="ft-big">Ujwal<br><span>Doijode</span></h2>
+      <p class="ft-sub">AI Engineer · Full Stack Developer · Builder<br>Open to exciting opportunities</p>
+      <div class="ft-links">
+        <a href="mailto:ujwaldoijode@gmail.com" class="ft-btn">Email Me</a>
+        <a href="https://www.linkedin.com/in/ujwal-k-doijode-7903a7205" target="_blank" class="ft-btn ft-btn-g">LinkedIn ↗</a>
+        <a href="https://github.com/UjwalDoijode" target="_blank" class="ft-btn ft-btn-g">GitHub ↗</a>
       </div>
-      <div class="footer-copy">© 2025 Ujwal Doijode. Crafted with intention.</div>
+      <div class="ft-copy">© 2025 Ujwal Doijode · Built with intention</div>
     </div>
   </footer>
 
