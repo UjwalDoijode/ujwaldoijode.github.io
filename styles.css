@@ -150,3 +150,24 @@ body {
     font-size: 40px;
   }
 }
+
+.container {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Stack instead of side-by-side */
+.content {
+  position: absolute;
+  z-index: 2;
+  text-align: center;
+}
+
+.image-container {
+  position: absolute;
+  z-index: 1;
+}
