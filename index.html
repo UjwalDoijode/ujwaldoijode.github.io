@@ -2,39 +2,211 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ujwal Doijode</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ujwal Doijode — AI Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <!-- Cursor Glow -->
-  <div class="cursor-glow"></div>
-
-  <!-- HERO SECTION -->
-  <section class="hero">
-
-    <div class="content">
-      <p class="intro">Hi, I’m</p>
-      <h1 class="name">Ujwal Doijode</h1>
-      <h2 class="typing" id="typing"></h2>
-
-      <p class="tagline">
-        Building AI systems, scalable backend platforms, and high-performance web apps.
-      </p>
-
-      <div class="buttons">
-        <button class="btn primary">View Work</button>
-        <button class="btn secondary">Contact</button>
+  <!-- ─────────────── LOADER ─────────────── -->
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="loader-label">Loading Experience</div>
+      <div class="loader-percent"><span id="loader-num">0</span><span class="pct">%</span></div>
+      <div class="loader-bar-track">
+        <div class="loader-bar-fill" id="loader-bar"></div>
       </div>
     </div>
+  </div>
 
-    <div class="image-container">
-      <div class="image-glow"></div>
-      <img src="profile.jpg" class="profile" />
+  <!-- ─────────────── CURSOR SPOTLIGHT ─────────────── -->
+  <div id="cursor-glow"></div>
+
+  <!-- ─────────────── HERO ─────────────── -->
+  <section id="hero">
+
+    <!-- Background ambient blobs -->
+    <div class="hero-bg">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
     </div>
 
+    <!-- Sticky scroll container -->
+    <div id="hero-sticky">
+
+      <!-- Text layer -->
+      <div id="hero-text" class="hero-text">
+        <div class="hi-line reveal-item">Hi, I'm</div>
+        <h1 class="name-line reveal-item">
+          <span class="name-gradient">Ujwal</span>
+          <span class="name-gradient">Doijode</span>
+        </h1>
+        <div class="typing-wrapper reveal-item">
+          <span id="typing-text"></span><span class="cursor-blink">|</span>
+        </div>
+        <p class="tagline reveal-item">
+          Building AI systems, scalable backend platforms,<br>and high-performance web applications.
+        </p>
+
+        <!-- CTA buttons -->
+        <div class="cta-row reveal-item">
+          <a href="https://github.com/UjwalDoijode" target="_blank" rel="noopener" class="btn btn-primary">
+            <span>View Work</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/ujwal-k-doijode-7903a7205" target="_blank" rel="noopener" class="btn btn-ghost">
+            <span>Contact</span>
+          </a>
+          <a href="https://drive.google.com/drive/folders/1ykmNU4GNyaDHZwU9pSG7kbeBnA8T7ddv" target="_blank" rel="noopener" class="btn btn-ghost">
+            <span>Résumé</span>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7L7 12L12 7M7 1V12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Profile image layer -->
+      <div id="hero-image-wrap">
+        <div id="hero-glow-ring"></div>
+        <div id="hero-img-tilt">
+          <img src="profile.jpg" alt="Ujwal Doijode" id="profile-img" />
+          <div class="img-overlay-gradient"></div>
+        </div>
+      </div>
+
+      <!-- Scroll hint -->
+      <div id="scroll-hint" class="reveal-item">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+
+    </div><!-- /hero-sticky -->
   </section>
+
+  <!-- ─────────────── PROJECTS ─────────────── -->
+  <section id="projects">
+
+    <div class="section-label reveal-scroll">Featured Project</div>
+
+    <!-- Project card: PageIndex -->
+    <article class="project-card reveal-scroll" data-index="0">
+      <div class="project-meta">
+        <span class="project-tag">AI · RAG · Backend</span>
+        <span class="project-year">2024</span>
+      </div>
+      <h2 class="project-title">PageIndex</h2>
+      <p class="project-subtitle">Agentic RAG Platform</p>
+      <p class="project-desc">
+        A next-generation document search system that uses AI reasoning instead of traditional
+        vector similarity. It navigates documents like a human — using structure instead of keywords —
+        delivering traceable, cited answers at scale.
+      </p>
+
+      <div class="project-highlights">
+        <div class="highlight-item">
+          <div class="h-dot"></div>
+          <span>Structure-aware retrieval — no embeddings required</span>
+        </div>
+        <div class="highlight-item">
+          <div class="h-dot"></div>
+          <span>Multi-document intelligent search with reasoning tree</span>
+        </div>
+        <div class="highlight-item">
+          <div class="h-dot"></div>
+          <span>Kafka-based async indexing pipeline</span>
+        </div>
+        <div class="highlight-item">
+          <div class="h-dot"></div>
+          <span>Copilot-based LLM routing — zero API key overhead</span>
+        </div>
+        <div class="highlight-item">
+          <div class="h-dot"></div>
+          <span>Token optimization for production cost efficiency</span>
+        </div>
+      </div>
+
+      <div class="project-tech">
+        <span class="tech-pill">Python</span>
+        <span class="tech-pill">FastAPI</span>
+        <span class="tech-pill">Kafka</span>
+        <span class="tech-pill">LLM Routing</span>
+        <span class="tech-pill">RAG</span>
+        <span class="tech-pill">Tree Search</span>
+      </div>
+
+      <a href="https://github.com/UjwalDoijode" target="_blank" rel="noopener" class="project-link">
+        View on GitHub
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5.5M11.5 2.5V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </article>
+
+    <!-- Project card 2: Full Stack / AI App -->
+    <article class="project-card reveal-scroll" data-index="1">
+      <div class="project-meta">
+        <span class="project-tag">Full Stack · AI</span>
+        <span class="project-year">2024</span>
+      </div>
+      <h2 class="project-title">AI Engineering</h2>
+      <p class="project-subtitle">Scalable Backend Platforms</p>
+      <p class="project-desc">
+        High-performance web applications and AI-integrated backend systems built for scale.
+        From REST APIs to real-time data pipelines — engineered with precision and deployed for production.
+      </p>
+
+      <div class="project-highlights">
+        <div class="highlight-item">
+          <div class="h-dot"></div>
+          <span>Production-grade REST & async API design</span>
+        </div>
+        <div class="highlight-item">
+          <div class="h-dot"></div>
+          <span>LLM integration & prompt engineering</span>
+        </div>
+        <div class="highlight-item">
+          <div class="h-dot"></div>
+          <span>Real-time event streaming architectures</span>
+        </div>
+        <div class="highlight-item">
+          <div class="h-dot"></div>
+          <span>Full stack delivery — backend to deployment</span>
+        </div>
+      </div>
+
+      <div class="project-tech">
+        <span class="tech-pill">Node.js</span>
+        <span class="tech-pill">TypeScript</span>
+        <span class="tech-pill">PostgreSQL</span>
+        <span class="tech-pill">Redis</span>
+        <span class="tech-pill">Docker</span>
+        <span class="tech-pill">OpenAI API</span>
+      </div>
+
+      <a href="https://github.com/UjwalDoijode" target="_blank" rel="noopener" class="project-link">
+        View on GitHub
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5.5M11.5 2.5V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </article>
+
+  </section>
+
+  <!-- ─────────────── FOOTER ─────────────── -->
+  <footer id="footer">
+    <div class="footer-inner reveal-scroll">
+      <div class="footer-name">Ujwal Doijode</div>
+      <p class="footer-sub">AI Engineer · Full Stack Developer · Builder</p>
+      <div class="footer-links">
+        <a href="https://github.com/UjwalDoijode" target="_blank" rel="noopener">GitHub</a>
+        <span class="footer-dot">·</span>
+        <a href="https://www.linkedin.com/in/ujwal-k-doijode-7903a7205" target="_blank" rel="noopener">LinkedIn</a>
+        <span class="footer-dot">·</span>
+        <a href="https://drive.google.com/drive/folders/1ykmNU4GNyaDHZwU9pSG7kbeBnA8T7ddv" target="_blank" rel="noopener">Résumé</a>
+      </div>
+      <div class="footer-copy">© 2025 Ujwal Doijode. Crafted with intention.</div>
+    </div>
+  </footer>
 
   <script src="script.js"></script>
 </body>
