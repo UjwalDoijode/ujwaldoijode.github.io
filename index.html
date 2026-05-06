@@ -1,307 +1,278 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ujwal K Doijode — AI Engineer</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ujwal Doijode — AI Engineer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Clash+Display:wght@400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
 
-  <!-- ══ LOADER ══ -->
+  <!-- ═══════════ LOADER ═══════════ -->
   <div id="loader">
-    <div class="loader-name">Ujwal.</div>
-    <div class="loader-bottom">
-      <div class="loader-label">Loading Experience</div>
-      <div class="loader-pct"><span id="loader-num">0</span>%</div>
-      <div class="loader-track"><div class="loader-fill" id="loader-bar"></div></div>
+    <div class="ld-top"><div class="ld-name">Ujwal.</div></div>
+    <div class="ld-bot">
+      <div class="ld-label">Loading Experience</div>
+      <div class="ld-pct"><span id="ld-num">0</span><sup>%</sup></div>
+      <div class="ld-bar"><div id="ld-fill"></div></div>
     </div>
   </div>
 
-  <!-- ══ CURSOR ══ -->
+  <!-- ═══════════ CURSOR ═══════════ -->
   <div id="cur-dot"></div>
   <div id="cur-ring"></div>
   <div id="cur-glow"></div>
 
-  <!-- ══ NAV ══ -->
+  <!-- ═══════════ NAV ═══════════ -->
   <nav id="nav">
-    <div class="nav-logo">Ujwal.</div>
+    <a href="#" class="nav-logo">Ujwal.</a>
     <div class="nav-links">
       <a href="#work">Work</a>
       <a href="#experience">Experience</a>
       <a href="#skills">Skills</a>
-      <a href="https://drive.google.com/drive/folders/1ykmNU4GNyaDHZwU9pSG7kbeBnA8T7ddv" target="_blank" class="nav-resume">Resume ↗</a>
+      <a href="https://drive.google.com/drive/folders/1ykmNU4GNyaDHZwU9pSG7kbeBnA8T7ddv" target="_blank" class="nav-cv">Résumé ↗</a>
     </div>
   </nav>
 
-  <!-- ══════════════════════════════════════════
-       HERO — pinned scroll scene
-  ════════════════════════════════════════════ -->
+  <!-- ═══════════════════════════════════════════════
+       HERO
+       • Image fills 100vh immediately on load (no drift)
+       • Flanking letters U-J-W-A-L | D-O-I-J-O-D-E
+       • Scroll → image clips upward (clip-path) 
+         text stays as image disappears under it
+  ════════════════════════════════════════════════ -->
   <section id="hero">
-
-    <!-- ambient blobs -->
-    <div class="blob b1"></div>
-    <div class="blob b2"></div>
-    <div class="blob b3"></div>
-
     <div id="hero-pin">
 
-      <!-- PHOTO — dominant, fills most of viewport -->
-      <div id="photo-scene">
-        <div id="photo-glow"></div>
-        <div id="photo-tilt">
-          <img src="profile.png" alt="Ujwal K Doijode" id="photo-img" />
-          <div class="photo-fade-bottom"></div>
-          <div class="photo-fade-sides"></div>
-        </div>
+      <!-- Particle canvas (behind everything) -->
+      <canvas id="ptcl"></canvas>
+
+      <!-- Glow rings (CSS animated) -->
+      <div class="glow-ring gr1"></div>
+      <div class="glow-ring gr2"></div>
+      <div class="glow-ring gr3"></div>
+
+      <!-- Full-screen photo -->
+      <div id="img-wrap">
+        <img id="hero-img" src="profile.jpg" alt="Ujwal Doijode"/>
+        <div class="img-grade"></div>
+        <div class="img-vign"></div>
+        <div class="img-vign-bottom"></div>
       </div>
 
-      <!-- TEXT — overlaid on photo -->
+      <!-- Flanking big letters (UJWAL left, DOIJODE right) -->
+      <div id="flank-l" class="flank">
+        <span>U</span><span>J</span><span>W</span><span>A</span><span>L</span>
+      </div>
+      <div id="flank-r" class="flank">
+        <span>D</span><span>O</span><span>I</span><span>J</span><span>O</span><span>D</span><span>E</span>
+      </div>
+
+      <!-- Bottom copy overlay -->
       <div id="hero-copy">
-        <div class="hero-hi r0">Hi, I'm</div>
-        <h1 class="hero-name r1">
-          <span>Ujwal K</span>
-          <span>Doijode</span>
-        </h1>
-        <div class="hero-role r2">
-          <span id="typed"></span><span class="tblink">|</span>
+        <div class="hc-l">
+          <div class="hc-role"><span id="typed"></span><span class="tc">|</span></div>
+          <p class="hc-sub">AI systems · Scalable backends · High-performance web</p>
         </div>
-        <p class="hero-tag r3">
-          Building AI systems · Scalable backends · High-performance web
-        </p>
-        <div class="hero-btns r4">
-          <a href="#work" class="btn-p">View Work</a>
+        <div class="hc-r">
+          <a href="#work" class="btn-p">View Work ↓</a>
           <a href="https://github.com/UjwalDoijode" target="_blank" class="btn-g">GitHub ↗</a>
           <a href="https://www.linkedin.com/in/ujwal-k-doijode-7903a7205" target="_blank" class="btn-g">LinkedIn ↗</a>
         </div>
       </div>
 
-      <div id="scroll-cue"><div class="sc-line"></div><span>scroll</span></div>
+      <!-- scroll indicator -->
+      <div id="scrl">
+        <div class="scrl-bar"><div class="scrl-dot"></div></div>
+        <span>scroll</span>
+      </div>
+
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════════
-       MARQUEE — tech stack logos (no gap filler)
-  ════════════════════════════════════════════ -->
-  <div id="marquee-wrap">
-    <div class="marquee-track" id="marquee">
-      <!-- duplicated for infinite loop -->
-    </div>
-  </div>
+  <!-- ═══════════ MARQUEE ═══════════ -->
+  <div id="mq-wrap"><div class="mq-track" id="mq"></div></div>
 
-  <!-- ══════════════════════════════════════════
-       WORK / PROJECTS
-  ════════════════════════════════════════════ -->
+  <!-- ═══════════════════════════════════════════════
+       WORK
+  ════════════════════════════════════════════════ -->
   <section id="work">
-    <div class="sec-eyebrow rs">Selected Work</div>
-    <h2 class="sec-title rs">Projects that<br><em>matter.</em></h2>
-
-    <!-- Project 1 -->
-    <article class="proj-card rs" data-delay="0">
-      <div class="proj-num">01</div>
-      <div class="proj-body">
-        <div class="proj-tags">
-          <span>AI · RAG · Backend</span>
-          <span>2024</span>
-        </div>
-        <h3 class="proj-name">Hybrid RAG System<br><span>with Reranking</span></h3>
-        <p class="proj-desc">
-          A production-grade RAG system combining BM25 sparse retrieval and dense vector
-          embeddings via Reciprocal Rank Fusion — then reranked by an LLM for relevance.
-          Improved response accuracy by <strong>30%</strong> over baseline vector-only retrieval.
-        </p>
-        <ul class="proj-bullets">
-          <li>BM25 + vector embeddings fused with RRF for top-10+ doc retrieval</li>
-          <li>LLM-based reranking layer for final response quality</li>
-          <li>Modular pipeline — swap any retriever or reranker without rewiring</li>
-        </ul>
-        <div class="proj-tech">
-          <span>Python</span><span>LangChain</span><span>LangGraph</span><span>Vector DB</span><span>FastAPI</span>
-        </div>
+    <div class="sw">
+      <div class="sh">
+        <span class="eye rs">Selected Work</span>
+        <h2 class="stitle rs">Projects that<br><em>matter.</em></h2>
       </div>
-    </article>
 
-    <!-- Project 2 -->
-    <article class="proj-card rs" data-delay="80">
-      <div class="proj-num">02</div>
-      <div class="proj-body">
-        <div class="proj-tags">
-          <span>Observability · LLMOps</span>
-          <span>2024</span>
+      <article class="pc rs">
+        <div class="pcn">01</div>
+        <div class="pcb">
+          <div class="pcm"><span class="pct-tag">AI · RAG · Backend</span><span class="pct-yr">2024</span></div>
+          <h3 class="pc-name">Hybrid RAG System<br><small>with Reranking</small></h3>
+          <p class="pc-desc">Production-grade retrieval combining BM25 sparse + dense vector embeddings via Reciprocal Rank Fusion, reranked by an LLM. Improved response accuracy by <strong>30%</strong> over baseline vector-only retrieval.</p>
+          <ul class="pc-list">
+            <li>BM25 + vector embeddings fused via RRF for top-10+ doc retrieval</li>
+            <li>LLM-based reranking layer for final response quality</li>
+            <li>Modular pipeline — swap any retriever or reranker independently</li>
+          </ul>
+          <div class="pc-stack"><span>Python</span><span>LangChain</span><span>LangGraph</span><span>Vector DB</span><span>FastAPI</span></div>
         </div>
-        <h3 class="proj-name">AI Observability<br><span>Pipeline</span></h3>
-        <p class="proj-desc">
-          Lightweight observability layer for monitoring and debugging LLM-based agents in
-          production. Tracks every tool call, latency spike, and token expenditure across
-          multi-step workflows — cutting debugging time by <strong>35%</strong>.
-        </p>
-        <ul class="proj-bullets">
-          <li>Agent execution traces, tool call logs, and latency dashboards</li>
-          <li>Token usage monitoring across all workflow steps</li>
-          <li>LangSmith + Prometheus integration with Grafana visualization</li>
-        </ul>
-        <div class="proj-tech">
-          <span>Python</span><span>LangSmith</span><span>Prometheus</span><span>Grafana</span><span>LangGraph</span>
-        </div>
-      </div>
-    </article>
+      </article>
 
-    <!-- Project 3 -->
-    <article class="proj-card rs" data-delay="160">
-      <div class="proj-num">03</div>
-      <div class="proj-body">
-        <div class="proj-tags">
-          <span>Agentic AI · Enterprise</span>
-          <span>2023–Present</span>
+      <article class="pc rs" style="--rd:.12s">
+        <div class="pcn">02</div>
+        <div class="pcb">
+          <div class="pcm"><span class="pct-tag">Observability · LLMOps</span><span class="pct-yr">2024</span></div>
+          <h3 class="pc-name">AI Observability<br><small>Pipeline</small></h3>
+          <p class="pc-desc">Lightweight observability layer for monitoring LLM agents in production. Tracks every tool call, latency spike and token expenditure — cutting debugging time by <strong>35%</strong>.</p>
+          <ul class="pc-list">
+            <li>Agent execution traces, tool call logs, latency dashboards</li>
+            <li>Token usage monitoring across all workflow steps</li>
+            <li>LangSmith + Prometheus integration with Grafana visualization</li>
+          </ul>
+          <div class="pc-stack"><span>Python</span><span>LangSmith</span><span>Prometheus</span><span>Grafana</span><span>LangGraph</span></div>
         </div>
-        <h3 class="proj-name">Agentic AI Platforms<br><span>@ OpenText</span></h3>
-        <p class="proj-desc">
-          Architected and shipped Agentic AI systems and ADT platforms at OpenText supporting
-          10+ enterprise workflows. Built reusable agent components, stateful multi-step
-          reasoning flows, and REST-optimized backends used by thousands of enterprise users.
-        </p>
-        <ul class="proj-bullets">
-          <li>LangChain + LangGraph multi-agent orchestration with modular tool abstractions</li>
-          <li>Microsoft 365 integration within Online Editing Services (OES)</li>
-          <li>Web Workers + long polling — cut UI blocking time by 55–60%</li>
-          <li>Observability with LangSmith + Prometheus; 30–40% faster debugging</li>
-        </ul>
-        <div class="proj-tech">
-          <span>LangChain</span><span>LangGraph</span><span>FastAPI</span><span>Spring Boot</span><span>Java</span><span>JS</span>
-        </div>
-      </div>
-    </article>
+      </article>
 
+      <article class="pc rs" style="--rd:.24s">
+        <div class="pcn">03</div>
+        <div class="pcb">
+          <div class="pcm"><span class="pct-tag">Agentic AI · Enterprise</span><span class="pct-yr">2023–Present</span></div>
+          <h3 class="pc-name">Agentic AI Platforms<br><small>@ OpenText</small></h3>
+          <p class="pc-desc">Architected Agentic AI systems and ADT platforms at OpenText supporting 10+ enterprise workflows with modular agent design, used by thousands of enterprise users globally.</p>
+          <ul class="pc-list">
+            <li>LangChain + LangGraph multi-agent orchestration with modular tool abstractions</li>
+            <li>Microsoft 365 integration within Online Editing Services (OES)</li>
+            <li>Web Workers + long polling — cut UI blocking time by 55–60%</li>
+            <li>LangSmith + Prometheus observability — 30–40% faster debugging</li>
+          </ul>
+          <div class="pc-stack"><span>LangChain</span><span>LangGraph</span><span>FastAPI</span><span>Spring Boot</span><span>Java</span><span>JS</span></div>
+        </div>
+      </article>
+    </div>
   </section>
 
-  <!-- ══════════════════════════════════════════
+  <!-- ═══════════════════════════════════════════════
        EXPERIENCE
-  ════════════════════════════════════════════ -->
+  ════════════════════════════════════════════════ -->
   <section id="experience">
-    <div class="sec-eyebrow rs">Career</div>
-    <h2 class="sec-title rs">Where I've<br><em>built things.</em></h2>
+    <div class="sw">
+      <span class="eye rs">Career</span>
+      <h2 class="stitle rs">Where I've<br><em>built things.</em></h2>
 
-    <div class="exp-list">
+      <div class="exp-list">
 
-      <div class="exp-item rs">
-        <div class="exp-line-col">
-          <div class="exp-dot"></div>
-          <div class="exp-line"></div>
-        </div>
-        <div class="exp-content">
-          <div class="exp-period">Sep 2023 — Present</div>
-          <div class="exp-role">Software Engineer</div>
-          <div class="exp-company">OpenText <span class="exp-loc">· Bangalore</span></div>
-          <ul class="exp-bullets">
-            <li>Built Agentic AI systems using LangChain, LangGraph, FastAPI supporting 10+ enterprise workflows</li>
-            <li>Implemented observability with LangSmith + Prometheus — 30–40% faster debugging</li>
-            <li>Full-stack: Java, Spring Boot, JavaScript, Backbone.js, Marionette.js across enterprise modules</li>
-            <li>Web Workers + long polling reduced UI blocking time by 55–60%</li>
-            <li>Contributed to Online Editing Services (OES) with Microsoft 365 integration</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="exp-item rs" style="--ed:0.1s">
-        <div class="exp-line-col">
-          <div class="exp-dot"></div>
-          <div class="exp-line"></div>
-        </div>
-        <div class="exp-content">
-          <div class="exp-period">Feb 2023 — Aug 2023</div>
-          <div class="exp-role">Software Developer Intern</div>
-          <div class="exp-company">Microfocus (now OpenText) <span class="exp-loc">· Bangalore</span></div>
-          <ul class="exp-bullets">
-            <li>Developed and enhanced features in a Golang environment with focus on code optimization</li>
-            <li>Deployed product on embedded Kubernetes system using Docker — streamlined ops</li>
-            <li>Built AWS Lambda function to automate VM start/stop — significant cost savings</li>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════
-       SKILLS — logo grid
-  ════════════════════════════════════════════ -->
-  <section id="skills">
-    <div class="sec-eyebrow rs">Arsenal</div>
-    <h2 class="sec-title rs">Tech I build<br><em>with.</em></h2>
-
-    <div class="skills-grid rs">
-
-      <div class="skill-cat">
-        <div class="skill-cat-label">Languages</div>
-        <div class="skill-logos">
-          <div class="sl" title="Python"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python"><span>Python</span></div>
-          <div class="sl" title="JavaScript"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JS"><span>JavaScript</span></div>
-          <div class="sl" title="Java"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java"><span>Java</span></div>
-          <div class="sl" title="Go"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg" alt="Go"><span>Go</span></div>
-          <div class="sl" title="C++"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++"><span>C / C++</span></div>
-          <div class="sl" title="TypeScript"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TS"><span>TypeScript</span></div>
-        </div>
-      </div>
-
-      <div class="skill-cat">
-        <div class="skill-cat-label">Frameworks</div>
-        <div class="skill-logos">
-          <div class="sl" title="FastAPI"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="FastAPI"><span>FastAPI</span></div>
-          <div class="sl" title="Spring Boot"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" alt="Spring"><span>Spring Boot</span></div>
-          <div class="sl" title="Node.js"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node"><span>Node.js</span></div>
-          <div class="sl lang-chain" title="LangChain">
-            <div class="logo-text-badge">🦜</div><span>LangChain</span>
+        <div class="exp-item rs">
+          <div class="exp-tl"><div class="exp-dot"></div><div class="exp-rail"></div></div>
+          <div class="exp-content">
+            <div class="exp-date">Sep 2023 — Present</div>
+            <div class="exp-role">Software Engineer</div>
+            <div class="exp-co">OpenText <span>· Bangalore, Karnataka</span></div>
+            <ul class="exp-pts">
+              <li>Built Agentic AI systems using LangChain, LangGraph, FastAPI supporting 10+ enterprise workflows</li>
+              <li>LangSmith + Prometheus observability — reduced debugging time by 30–40%</li>
+              <li>Full-stack: Java, Spring Boot, JavaScript, Backbone.js, Marionette.js across enterprise modules</li>
+              <li>Web Workers + long polling cut UI blocking time by 55–60%</li>
+              <li>Contributed to OES with Microsoft 365 integration used by thousands of enterprise users</li>
+            </ul>
           </div>
-          <div class="sl" title="React"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React"><span>React</span></div>
         </div>
-      </div>
 
-      <div class="skill-cat">
-        <div class="skill-cat-label">Data & DevOps</div>
-        <div class="skill-logos">
-          <div class="sl" title="PostgreSQL"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL"><span>PostgreSQL</span></div>
-          <div class="sl" title="MySQL"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL"><span>MySQL</span></div>
-          <div class="sl" title="Docker"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker"><span>Docker</span></div>
-          <div class="sl" title="Kubernetes"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg" alt="K8s"><span>Kubernetes</span></div>
-          <div class="sl" title="AWS"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="AWS"><span>AWS</span></div>
-          <div class="sl" title="Git"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git"><span>Git</span></div>
-          <div class="sl" title="Prometheus"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prometheus/prometheus-original.svg" alt="Prometheus"><span>Prometheus</span></div>
-          <div class="sl" title="Grafana"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grafana/grafana-original.svg" alt="Grafana"><span>Grafana</span></div>
+        <div class="exp-item rs" style="--rd:.14s">
+          <div class="exp-tl"><div class="exp-dot"></div></div>
+          <div class="exp-content">
+            <div class="exp-date">Feb 2023 — Aug 2023</div>
+            <div class="exp-role">Software Developer Intern</div>
+            <div class="exp-co">Microfocus (now OpenText) <span>· Bangalore, Karnataka</span></div>
+            <ul class="exp-pts">
+              <li>Developed and enhanced features in Golang — feature implementation, optimization, defect resolution</li>
+              <li>Deployed product on embedded Kubernetes using Docker, streamlining deployment efficiency</li>
+              <li>Built AWS Lambda function automating VM start/stop — significant cost savings</li>
+            </ul>
+          </div>
         </div>
-      </div>
 
-      <div class="skill-cat">
-        <div class="skill-cat-label">AI / LLM</div>
-        <div class="skill-logos">
-          <div class="sl ai-pill"><div class="ai-badge">⚡</div><span>Agentic AI</span></div>
-          <div class="sl ai-pill"><div class="ai-badge">🔍</div><span>RAG Systems</span></div>
-          <div class="sl ai-pill"><div class="ai-badge">📊</div><span>Vector DBs</span></div>
-          <div class="sl ai-pill"><div class="ai-badge">🔭</div><span>LangSmith</span></div>
-          <div class="sl ai-pill"><div class="ai-badge">🕸</div><span>LangGraph</span></div>
-        </div>
       </div>
-
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════════
-       FOOTER / CTA
-  ════════════════════════════════════════════ -->
-  <footer id="footer">
-    <div class="ft-bg-glow"></div>
-    <div class="ft-inner rs">
-      <div class="ft-eyebrow">Let's build together</div>
-      <h2 class="ft-big">Ujwal K<br><span>Doijode</span></h2>
-      <p class="ft-sub">AI Engineer · Full Stack Developer · Builder<br>Open to exciting opportunities</p>
-      <div class="ft-links">
-        <a href="mailto:ujwaldoijode@gmail.com" class="ft-btn">Email Me</a>
-        <a href="https://www.linkedin.com/in/ujwal-k-doijode-7903a7205" target="_blank" class="ft-btn ft-btn-g">LinkedIn ↗</a>
-        <a href="https://github.com/UjwalDoijode" target="_blank" class="ft-btn ft-btn-g">GitHub ↗</a>
+  <!-- ═══════════════════════════════════════════════
+       SKILLS
+  ════════════════════════════════════════════════ -->
+  <section id="skills">
+    <div class="sw">
+      <span class="eye rs">Arsenal</span>
+      <h2 class="stitle rs">Tech I build<br><em>with.</em></h2>
+
+      <div class="sk-grid rs">
+
+        <div class="sk-cat">
+          <div class="sk-lbl">Languages</div>
+          <div class="sk-row">
+            <div class="ski"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python"><span>Python</span></div>
+            <div class="ski"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JS"><span>JavaScript</span></div>
+            <div class="ski"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java"><span>Java</span></div>
+            <div class="ski"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg" alt="Go"><span>Go</span></div>
+            <div class="ski"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++"><span>C / C++</span></div>
+            <div class="ski"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TS"><span>TypeScript</span></div>
+          </div>
+        </div>
+
+        <div class="sk-cat">
+          <div class="sk-lbl">Frameworks</div>
+          <div class="sk-row">
+            <div class="ski"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="FastAPI"><span>FastAPI</span></div>
+            <div class="ski"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" alt="Spring"><span>Spring Boot</span></div>
+            <div class="ski"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node"><span>Node.js</span></div>
+            <div class="ski"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React"><span>React</span></div>
+            <div class="ski ski-e"><span class="ske">🦜</span><span>LangChain</span></div>
+            <div class="ski ski-e"><span class="ske">🕸</span><span>LangGraph</span></div>
+          </div>
+        </div>
+
+        <div class="sk-cat">
+          <div class="sk-lbl">DevOps & Data</div>
+          <div class="sk-row">
+            <div class="ski"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker"><span>Docker</span></div>
+            <div class="ski"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg" alt="K8s"><span>Kubernetes</span></div>
+            <div class="ski ski-aws"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="AWS"><span>AWS</span></div>
+            <div class="ski"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PG"><span>PostgreSQL</span></div>
+            <div class="ski"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prometheus/prometheus-original.svg" alt="Prom"><span>Prometheus</span></div>
+            <div class="ski"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grafana/grafana-original.svg" alt="Grafana"><span>Grafana</span></div>
+            <div class="ski"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git"><span>Git</span></div>
+          </div>
+        </div>
+
+        <div class="sk-cat">
+          <div class="sk-lbl">AI / LLM</div>
+          <div class="sk-row">
+            <div class="ski ski-e"><span class="ske">⚡</span><span>Agentic AI</span></div>
+            <div class="ski ski-e"><span class="ske">🔍</span><span>RAG Systems</span></div>
+            <div class="ski ski-e"><span class="ske">📊</span><span>Vector DBs</span></div>
+            <div class="ski ski-e"><span class="ske">🔭</span><span>LangSmith</span></div>
+            <div class="ski ski-e"><span class="ske">🤖</span><span>LLM Routing</span></div>
+          </div>
+        </div>
+
       </div>
-      <div class="ft-copy">© 2026 Ujwal K Doijode · Built with intention</div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer id="footer">
+    <div class="ft-glow"></div>
+    <div class="ft-in rs">
+      <div class="ft-eye">Let's build something great</div>
+      <h2 class="ft-name">Ujwal<br><em>Doijode</em></h2>
+      <p class="ft-sub">AI Engineer · Full Stack Developer · Builder<br><span>Open to exciting opportunities</span></p>
+      <div class="ft-btns">
+        <a href="mailto:ujwaldoijode@gmail.com" class="btn-p">Email Me</a>
+        <a href="https://www.linkedin.com/in/ujwal-k-doijode-7903a7205" target="_blank" class="btn-g">LinkedIn ↗</a>
+        <a href="https://github.com/UjwalDoijode" target="_blank" class="btn-g">GitHub ↗</a>
+      </div>
+      <p class="ft-copy">© 2025 Ujwal Doijode · Built with intention</p>
     </div>
   </footer>
 
