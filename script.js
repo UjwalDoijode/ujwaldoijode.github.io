@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════
-   script.js — Ujwal Doijode Portfolio v4
+   script.js — Ujwal Doijode Portfolio v5
    Pure vanilla JS. Zero dependencies.
 ══════════════════════════════════════════════ */
 (function () {
@@ -29,55 +29,83 @@ const loadInterval = setInterval(() => {
 function onLoaded() {
   loader.classList.add('out');
   document.body.classList.add('loaded');
+  buildName();       // build letter spans before revealing
   revealHero();
   initParticles();
   startTyping();
 }
 
 /* ─────────────────────────────────────────────
-   2. HERO ENTRANCE
+   2. BUILD NAME — split into individual letter spans
+   HTML has two .hn-word containers and a .hn-sep.
+   We inject <span class="hn-l"> for each character.
+───────────────────────────────────────────── */
+function buildName() {
+  const words = document.querySelectorAll('.hn-word');
+  words.forEach(word => {
+    const text = word.dataset.text || word.textContent.trim();
+    word.textContent = '';
+    word.dataset.text = text;
+    [...text].forEach(ch => {
+      const span = document.createElement('span');
+      span.className = 'hn-l';
+      span.textContent = ch;
+      word.appendChild(span);
+    });
+  });
+}
+
+/* ─────────────────────────────────────────────
+   3. HERO ENTRANCE
 ───────────────────────────────────────────── */
 const hPhoto  = document.getElementById('h-photo');
 const hCopy   = document.getElementById('h-copy');
 const hScroll = document.getElementById('h-scroll');
-const hName   = document.getElementById('h-name');
 const hTLine  = document.getElementById('h-title-line');
 
 function revealHero() {
-  /* Photo entrance — scale + blur → sharp, purely vertical */
+  /* Photo entrance */
   hPhoto.style.cssText = `
     opacity: 0;
-    filter: blur(20px) brightness(0.3) saturate(0.1);
-    transform: translateX(-50%) scale(1.1);
+    filter: blur(18px) brightness(0.3) saturate(0.1);
+    transform: translateX(-50%) scale(1.08);
     transition:
-      opacity    1.6s cubic-bezier(0.16,1,0.3,1),
-      filter     1.5s cubic-bezier(0.16,1,0.3,1),
-      transform  1.7s cubic-bezier(0.16,1,0.3,1);
+      opacity   1.5s cubic-bezier(0.16,1,0.3,1),
+      filter    1.4s cubic-bezier(0.16,1,0.3,1),
+      transform 1.6s cubic-bezier(0.16,1,0.3,1);
   `;
   requestAnimationFrame(() => requestAnimationFrame(() => {
     setTimeout(() => {
       hPhoto.style.opacity   = '1';
       hPhoto.style.filter    = 'blur(0px) brightness(1) saturate(1)';
       hPhoto.style.transform = 'translateX(-50%) scale(1)';
-    }, 60);
+    }, 80);
   }));
 
-  /* Name reveal */
-  setTimeout(() => {
-    hName.classList.add('vis');
-    hTLine.classList.add('vis');
-  }, 280);
+  /* Letters — stagger each one dropping in */
+  const letters = document.querySelectorAll('.hn-l');
+  letters.forEach((l, i) => {
+    // stagger: 60ms per letter, starting at 200ms
+    setTimeout(() => l.classList.add('vis'), 200 + i * 55);
+  });
 
-  /* Copy */
+  /* Separator dot */
+  const sep = document.querySelector('.hn-sep');
+  if (sep) setTimeout(() => sep.classList.add('vis'), 200 + letters.length * 55);
+
+  /* Subtitle line */
+  if (hTLine) setTimeout(() => hTLine.classList.add('vis'), 600);
+
+  /* Copy + scroll cue */
   [hCopy, hScroll].forEach((el, i) => {
     if (!el) return;
     el.classList.add('hv');
-    setTimeout(() => el.classList.add('vis'), 650 + i * 180);
+    setTimeout(() => el.classList.add('vis'), 700 + i * 180);
   });
 }
 
 /* ─────────────────────────────────────────────
-   3. PARTICLE SYSTEM
+   4. PARTICLE SYSTEM
 ───────────────────────────────────────────── */
 const canvas = document.getElementById('ptcl');
 const ctx    = canvas.getContext('2d');
@@ -93,11 +121,7 @@ window.addEventListener('resize', () => { sizeCanvas(); spawnAll(); });
 function rnd(a, b) { return a + Math.random() * (b - a); }
 
 const PALETTES = [
-  [139,111,255],
-  [91, 158,255],
-  [180,160,255],
-  [220,200,255],
-  [255,255,255],
+  [139,111,255],[91,158,255],[180,160,255],[220,200,255],[255,255,255],
 ];
 
 class Dot {
@@ -112,62 +136,49 @@ class Dot {
     this.max  = rnd(200, 400);
     this.rgb  = PALETTES[Math.floor(Math.random() * PALETTES.length)];
   }
-  step() {
-    this.x += this.vx; this.y += this.vy; this.life++;
-    if (this.life > this.max || this.y < -6) this.reset(false);
-  }
+  step() { this.x += this.vx; this.y += this.vy; this.life++; if (this.life > this.max || this.y < -6) this.reset(false); }
   draw() {
     const a = Math.sin((this.life / this.max) * Math.PI) * 0.65;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-    ctx.fillStyle   = `rgba(${this.rgb},${a})`;
-    ctx.shadowBlur  = 7;
-    ctx.shadowColor = `rgba(${this.rgb},0.55)`;
-    ctx.fill();
-    ctx.shadowBlur  = 0;
+    ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${this.rgb},${a})`;
+    ctx.shadowBlur = 7; ctx.shadowColor = `rgba(${this.rgb},0.55)`;
+    ctx.fill(); ctx.shadowBlur = 0;
   }
 }
 
 class Nebula {
   constructor(init) { this.reset(init === true); }
   reset(init) {
-    this.x    = rnd(W * 0.15, W * 0.85);
-    this.y    = init ? rnd(0, H) : H + 180;
-    this.r    = rnd(70, 160);
+    this.x    = rnd(W * 0.1, W * 0.9);
+    this.y    = init ? rnd(0, H) : H + 200;
+    this.r    = rnd(80, 170);
     this.vx   = rnd(-0.05, 0.05);
-    this.vy   = rnd(-0.1, -0.03);
+    this.vy   = rnd(-0.09, -0.03);
     this.life = 0;
     this.max  = rnd(350, 650);
     this.hue  = Math.random() > 0.5 ? '139,111,255' : '91,158,255';
   }
-  step() {
-    this.x += this.vx; this.y += this.vy; this.life++;
-    if (this.life > this.max || this.y < -200) this.reset(false);
-  }
+  step() { this.x += this.vx; this.y += this.vy; this.life++; if (this.life > this.max || this.y < -200) this.reset(false); }
   draw() {
-    const a = Math.sin((this.life / this.max) * Math.PI) * 0.065;
+    const a = Math.sin((this.life / this.max) * Math.PI) * 0.06;
     const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r);
-    g.addColorStop(0, `rgba(${this.hue},${a})`);
-    g.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-    ctx.fillStyle = g;
-    ctx.fill();
+    g.addColorStop(0, `rgba(${this.hue},${a})`); g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = g; ctx.fill();
   }
 }
 
 function spawnAll() {
-  const mobile = window.innerWidth < 768;
+  const mob = window.innerWidth < 768;
   ptcls = [
-    ...Array.from({length: mobile ? 20 : 55}, () => new Dot(true)),
-    ...Array.from({length: mobile ? 3  : 7},  () => new Nebula(true)),
+    ...Array.from({length: mob ? 20 : 55}, () => new Dot(true)),
+    ...Array.from({length: mob ? 3  : 7},  () => new Nebula(true)),
   ];
 }
 
 function initParticles() {
   if (animGoing) return;
-  animGoing = true;
-  spawnAll();
+  animGoing = true; spawnAll();
   (function loop() {
     ctx.clearRect(0, 0, W, H);
     ptcls.forEach(p => { p.step(); p.draw(); });
@@ -176,10 +187,10 @@ function initParticles() {
 }
 
 /* ─────────────────────────────────────────────
-   4. TYPING
+   5. TYPING
 ───────────────────────────────────────────── */
-const ROLES  = ['AI Engineer', 'Full Stack Developer', 'Builder', 'LLM Systems Designer'];
-const typEl  = document.getElementById('typed');
+const ROLES = ['AI Engineer', 'Full Stack Developer', 'Builder', 'LLM Systems Designer'];
+const typEl = document.getElementById('typed');
 let ri = 0, ci = 0, del = false;
 
 function startTyping() { tick(); }
@@ -196,7 +207,7 @@ function tick() {
 }
 
 /* ─────────────────────────────────────────────
-   5. CURSOR
+   6. CURSOR
 ───────────────────────────────────────────── */
 const cDot  = document.getElementById('c-dot');
 const cRing = document.getElementById('c-ring');
@@ -206,60 +217,61 @@ let rx = mx, ry = my;
 
 document.addEventListener('mousemove', e => {
   mx = e.clientX; my = e.clientY;
-  cDot.style.left  = mx + 'px'; cDot.style.top  = my + 'px';
+  cDot.style.left = mx + 'px'; cDot.style.top  = my + 'px';
   cGlow.style.left = mx + 'px'; cGlow.style.top = my + 'px';
   cGlow.style.opacity = '1';
 });
 document.addEventListener('mouseleave', () => cGlow.style.opacity = '0');
-
 (function ringLoop() {
   rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1;
   cRing.style.left = rx + 'px'; cRing.style.top = ry + 'px';
   requestAnimationFrame(ringLoop);
 })();
 
-document.querySelectorAll('a, .btn-v, .btn-o, .ski').forEach(el => {
+document.querySelectorAll('a,.btn-v,.btn-o,.ski').forEach(el => {
   el.addEventListener('mouseenter', () => {
-    cDot.style.width = '12px'; cDot.style.height = '12px';
-    cDot.style.background = 'var(--v2)';
-    cRing.style.width = '52px'; cRing.style.height = '52px';
-    cRing.style.borderColor = 'rgba(91,158,255,0.75)';
+    cDot.style.width = '12px'; cDot.style.height = '12px'; cDot.style.background = 'var(--v2)';
+    cRing.style.width = '52px'; cRing.style.height = '52px'; cRing.style.borderColor = 'rgba(91,158,255,0.75)';
   });
   el.addEventListener('mouseleave', () => {
-    cDot.style.width = '6px'; cDot.style.height = '6px';
-    cDot.style.background = 'var(--v1)';
-    cRing.style.width = '32px'; cRing.style.height = '32px';
-    cRing.style.borderColor = 'rgba(139,111,255,0.5)';
+    cDot.style.width = '6px'; cDot.style.height = '6px'; cDot.style.background = 'var(--v1)';
+    cRing.style.width = '32px'; cRing.style.height = '32px'; cRing.style.borderColor = 'rgba(139,111,255,0.5)';
   });
 });
 
 /* ─────────────────────────────────────────────
-   6. NAV SCROLL STATE
+   7. NAV
 ───────────────────────────────────────────── */
 const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', window.scrollY > 50);
-}, { passive: true });
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 50), { passive: true });
 
 /* ─────────────────────────────────────────────
-   7. HERO SCROLL — CINEMATIC
+   8. HERO SCROLL — REDESIGNED
    
-   FIX 1: Glow rings fade OUT as photo clips away (p=0.25→0.7)
-           so no empty glowing void remains after photo disappears.
-   FIX 2: bg-blur fades out with the photo — no orphaned purple circle.
-   FIX 3: Particle canvas fades out so particles don't bleed
-           into the work section below.
+   The big idea:
+   • Photo clips from bottom (same cinematic mechanic)
+   • Name: "UJWAL" slides LEFT off screen, "DOIJODE" slides RIGHT
+     (like a curtain parting — the name splits apart)
+   • ALL atmospheric layers (rings, bg-blur, particles) fade to zero
+     cleanly so there is ZERO empty space / void visible
+   • #h-pin has background:var(--bg) so even if JS is slow,
+     the background is always solid dark — never a purple circle
 ───────────────────────────────────────────── */
-const heroSec = document.getElementById('hero');
-const phImg   = document.getElementById('ph-img');
-const bgBlur  = document.getElementById('bg-blur');
-const flName  = document.getElementById('h-name-wrap');
-const grEls   = document.querySelectorAll('.gr');
+const heroSec  = document.getElementById('hero');
+const phImg    = document.getElementById('ph-img');
+const bgBlur   = document.getElementById('bg-blur');
+const grEls    = document.querySelectorAll('.gr');
+const wordLeft = document.querySelector('.hn-word[data-text="UJWAL"]');
+const wordRight= document.querySelector('.hn-word[data-text="DOIJODE"]');
+const nameSep  = document.querySelector('.hn-sep');
+const nameWrap = document.getElementById('h-name-wrap');
 
 let lastSY = 0, rafPending = false;
 
 function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
-function ease(t) { return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2; }
+function ease(t) { return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2,2)/2; }
+// More aggressive ease for name split — snappier departure
+function easeIn(t) { return t * t * t; }
 
 function applyScroll() {
   rafPending = false;
@@ -268,57 +280,62 @@ function applyScroll() {
   const rawP  = clamp(lastSY / (heroH - viewH), 0, 1);
   const p     = ease(rawP);
 
-  /* ── Photo: clip from bottom (Akshay mechanic) ── */
-  const clipB = clamp(p * 108, 0, 102);
+  /* ── Photo: clip from bottom ── */
+  const clipB = clamp(p * 110, 0, 102);
   hPhoto.style.clipPath = `inset(0% 0% ${clipB}% 0% round 0px)`;
-  /* Ken-burns scale on inner img only */
-  if (phImg) phImg.style.transform = `scale(${1 + p * 0.18})`;
+  if (phImg) phImg.style.transform = `scale(${1 + p * 0.15})`;
 
-  /* ── Name: spread apart + fade ── */
-  const nameOp = clamp(1 - p * 2.2, 0, 1);
-  const nameY  = -p * 40;
-  if (flName) {
-    flName.style.opacity   = nameOp;
-    flName.style.transform = `translateY(${nameY}px)`;
+  /* ── NAME SPLIT: UJWAL flies LEFT, DOIJODE flies RIGHT ──
+     Starts moving at p=0, fully off-screen by p=0.5.
+     translateX uses viewport width so it's always off-screen.
+  */
+  const splitP = clamp(p / 0.5, 0, 1); // 0→1 during first half of scroll
+  const splitE = easeIn(splitP);         // accelerates out — feels snappy
+  const vwOffset = window.innerWidth * 0.55; // how far off screen
+
+  if (wordLeft) {
+    wordLeft.style.transform = `translateX(${-splitE * vwOffset}px)`;
+    wordLeft.style.opacity   = clamp(1 - splitP * 1.4, 0, 1);
   }
+  if (wordRight) {
+    wordRight.style.transform = `translateX(${splitE * vwOffset}px)`;
+    wordRight.style.opacity   = clamp(1 - splitP * 1.4, 0, 1);
+  }
+  if (nameSep) {
+    nameSep.style.opacity   = clamp(0.8 - splitP * 2, 0, 0.8);
+    nameSep.style.transform = `scale(${1 - splitP * 0.3})`;
+  }
+  /* Whole name wrap fades once letters are gone */
+  if (nameWrap) nameWrap.style.opacity = clamp(1 - p * 2.5, 0, 1);
 
-  /* ── Copy: fade up ── */
+  /* ── Subtitle + copy ── */
+  if (hTLine) {
+    hTLine.style.opacity   = clamp(1 - p * 3, 0, 1);
+    hTLine.style.transform = `translateY(${-p * 20}px)`;
+  }
   const copyOp = clamp(1 - p * 2.8, 0, 1);
-  const copyY  = -p * 44;
   if (hCopy) {
     hCopy.style.opacity   = copyOp;
-    hCopy.style.transform = `translateY(${copyY}px)`;
+    hCopy.style.transform = `translateY(${-p * 40}px)`;
   }
-
-  /* ── Scroll cue ── */
   if (hScroll) hScroll.style.opacity = clamp(1 - p * 5, 0, 1);
 
-  /* ── FIX 1: Glow rings fade OUT as photo clips away ──
-     Full opacity at p=0 → completely gone by p=0.7.
-     This eliminates the glowing empty circle after photo disappears.
-  */
+  /* ── Glow rings: fade to zero ── */
   grEls.forEach((g, i) => {
-    const expand = 1 + p * (0.08 + i * 0.04);
-    /* Start fading at p=0.25, fully transparent by p=0.7 */
-    const ringOp = clamp(1 - (p - 0.25) / 0.45, 0, 1);
+    const expand = 1 + p * (0.06 + i * 0.03);
+    const ringOp = clamp(1 - (p - 0.2) / 0.4, 0, 1);
     g.style.transform = `translate(-50%,-50%) scale(${expand})`;
     g.style.opacity   = ringOp;
   });
 
-  /* ── FIX 2: BG blur fades out with the photo ──
-     Max opacity 0.65 at p=0 → zero by p≈0.55.
-     No orphaned purple atmospheric circle left behind.
-  */
+  /* ── BG blur: fades to zero, no orphaned atmosphere ── */
   if (bgBlur) {
-    const bgScale = 1 + p * 0.06;
-    const bgOp    = clamp(0.65 - p * 1.2, 0, 0.65);
-    bgBlur.style.transform = `scale(${bgScale})`;
-    bgBlur.style.opacity   = bgOp;
+    bgBlur.style.opacity   = clamp(0.5 - p * 1.1, 0, 0.5);
+    bgBlur.style.transform = `scale(${1 + p * 0.05})`;
   }
 
-  /* ── FIX 3: Particles fade out so they don't float over work section ── */
-  const cvs = document.getElementById('ptcl');
-  if (cvs) cvs.style.opacity = clamp(1 - p * 1.8, 0, 1);
+  /* ── Particles: fade out so they don't bleed below ── */
+  canvas.style.opacity = clamp(1 - p * 2, 0, 1);
 }
 
 window.addEventListener('scroll', () => {
@@ -327,53 +344,53 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 /* ─────────────────────────────────────────────
-   8. IMAGE 3D TILT  (desktop only)
+   9. IMAGE 3D TILT (desktop only)
 ───────────────────────────────────────────── */
 const isTouchDevice = () => window.matchMedia('(hover: none)').matches;
 let tx = 0, ty = 0, ttx = 0, tty = 0;
 
 document.addEventListener('mousemove', e => {
   if (isTouchDevice()) return;
-  if (lastSY > window.innerHeight * 0.25) { ttx = 0; tty = 0; return; }
+  if (lastSY > window.innerHeight * 0.2) { ttx = 0; tty = 0; return; }
   const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
-  ttx = ((e.clientY - cy) / cy) * -4.5;
-  tty = ((e.clientX - cx) / cx) *  4.5;
+  ttx = ((e.clientY - cy) / cy) * -4;
+  tty = ((e.clientX - cx) / cx) *  4;
 });
 document.addEventListener('mouseleave', () => { ttx = 0; tty = 0; });
 
 (function tiltLoop() {
   if (!isTouchDevice()) {
-    tx += (ttx - tx) * 0.065; ty += (tty - ty) * 0.065;
-    if (phImg && lastSY < window.innerHeight * 0.3) {
+    tx += (ttx - tx) * 0.06; ty += (tty - ty) * 0.06;
+    if (phImg && lastSY < window.innerHeight * 0.25) {
       const scrollP = lastSY / Math.max(1, heroSec.offsetHeight - window.innerHeight);
-      phImg.style.transform = `scale(${1 + scrollP * 0.18}) perspective(900px) rotateX(${tx}deg) rotateY(${ty}deg)`;
+      phImg.style.transform = `scale(${1 + scrollP * 0.15}) perspective(900px) rotateX(${tx}deg) rotateY(${ty}deg)`;
     }
   }
   requestAnimationFrame(tiltLoop);
 })();
 
 /* ─────────────────────────────────────────────
-   9. MARQUEE BUILD
+   10. MARQUEE
 ───────────────────────────────────────────── */
 const MQ = [
-  { l:'Python',      i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
-  { l:'LangChain',   e:'🦜' },
-  { l:'FastAPI',     i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg' },
-  { l:'Java',        i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
-  { l:'Spring Boot', i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg' },
-  { l:'JavaScript',  i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' },
-  { l:'Go',          i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg' },
-  { l:'Docker',      i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg' },
-  { l:'Kubernetes',  i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg' },
-  { l:'PostgreSQL',  i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg' },
-  { l:'AWS',         i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg' },
-  { l:'Prometheus',  i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prometheus/prometheus-original.svg' },
-  { l:'Grafana',     i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grafana/grafana-original.svg' },
-  { l:'LangGraph',   e:'🕸' },
-  { l:'Vector DB',   e:'📊' },
-  { l:'Agentic AI',  e:'⚡' },
-  { l:'LangSmith',   e:'🔭' },
-  { l:'TypeScript',  i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg' },
+  { l:'Python',     i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
+  { l:'LangChain',  e:'🦜' },
+  { l:'FastAPI',    i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg' },
+  { l:'Java',       i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
+  { l:'Spring Boot',i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg' },
+  { l:'JavaScript', i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' },
+  { l:'Go',         i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg' },
+  { l:'Docker',     i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg' },
+  { l:'Kubernetes', i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg' },
+  { l:'PostgreSQL', i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg' },
+  { l:'AWS',        i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg' },
+  { l:'Prometheus', i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prometheus/prometheus-original.svg' },
+  { l:'Grafana',    i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grafana/grafana-original.svg' },
+  { l:'LangGraph',  e:'🕸' },
+  { l:'Vector DB',  e:'📊' },
+  { l:'Agentic AI', e:'⚡' },
+  { l:'LangSmith',  e:'🔭' },
+  { l:'TypeScript', i:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg' },
 ];
 
 function buildMarquee() {
@@ -391,15 +408,15 @@ function buildMarquee() {
 buildMarquee();
 
 /* ─────────────────────────────────────────────
-   10. STATS COUNTER ANIMATION
+   11. STATS COUNTER
 ───────────────────────────────────────────── */
 function animateCounter(el, target, duration) {
   let start = null;
-  const step = (ts) => {
+  const step = ts => {
     if (!start) start = ts;
     const p = Math.min((ts - start) / duration, 1);
-    const ease = 1 - Math.pow(1 - p, 3);
-    el.textContent = Math.round(ease * target);
+    const e = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(e * target);
     if (p < 1) requestAnimationFrame(step);
     else el.textContent = target + (target > 9 ? '+' : '');
   };
@@ -417,22 +434,20 @@ const statIO = new IntersectionObserver(entries => {
     }
   });
 }, { threshold: 0.5 });
-
 document.querySelectorAll('.stat').forEach(s => statIO.observe(s));
 
 /* ─────────────────────────────────────────────
-   11. SCROLL REVEAL
+   12. SCROLL REVEAL
 ───────────────────────────────────────────── */
 const revIO = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (e.isIntersecting) { e.target.classList.add('vis'); revIO.unobserve(e.target); }
   });
 }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
-
 document.querySelectorAll('.rs').forEach(el => revIO.observe(el));
 
 /* ─────────────────────────────────────────────
-   12. PROJECT CARD MOUSE GLOW
+   13. PROJECT CARD MOUSE GLOW
 ───────────────────────────────────────────── */
 document.querySelectorAll('.pc').forEach(card => {
   card.addEventListener('mousemove', e => {
@@ -442,25 +457,6 @@ document.querySelectorAll('.pc').forEach(card => {
     card.style.backgroundImage = `radial-gradient(circle at ${x}% ${y}%, rgba(139,111,255,0.055) 0%, transparent 52%)`;
   });
   card.addEventListener('mouseleave', () => card.style.backgroundImage = '');
-});
-
-/* ─────────────────────────────────────────────
-   13. NAME HOVER GLOW
-───────────────────────────────────────────── */
-const hnFirst = document.getElementById('hn-first');
-const hnLast  = document.getElementById('hn-last');
-
-[hnFirst, hnLast].forEach(el => {
-  if (!el) return;
-  el.addEventListener('mouseenter', () => {
-    el.style.transition = '-webkit-text-stroke .3s, color .3s';
-    el.style.webkitTextStroke = '1.5px rgba(180,160,255,0.9)';
-    el.style.textShadow = '0 0 60px rgba(139,111,255,0.35)';
-  });
-  el.addEventListener('mouseleave', () => {
-    el.style.webkitTextStroke = '1.5px rgba(220,210,255,0.55)';
-    el.style.textShadow = 'none';
-  });
 });
 
 })(); // end IIFE
