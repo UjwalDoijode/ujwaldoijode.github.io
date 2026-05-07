@@ -36,9 +36,6 @@ function onLoaded() {
 
 /* ─────────────────────────────────────────────
    2. HERO ENTRANCE
-   Image: scale + blur → sharp, purely vertical.
-   NO translateX drift. We keep translateX(-50%)
-   fixed the whole time — only scale/filter change.
 ───────────────────────────────────────────── */
 const hPhoto  = document.getElementById('h-photo');
 const hCopy   = document.getElementById('h-copy');
@@ -47,7 +44,7 @@ const hName   = document.getElementById('h-name');
 const hTLine  = document.getElementById('h-title-line');
 
 function revealHero() {
-  /* ── Photo entrance ── */
+  /* Photo entrance — scale + blur → sharp, purely vertical */
   hPhoto.style.cssText = `
     opacity: 0;
     filter: blur(20px) brightness(0.3) saturate(0.1);
@@ -65,13 +62,13 @@ function revealHero() {
     }, 60);
   }));
 
-  /* ── Name reveal ── */
+  /* Name reveal */
   setTimeout(() => {
     hName.classList.add('vis');
     hTLine.classList.add('vis');
   }, 280);
 
-  /* ── Copy ── */
+  /* Copy */
   [hCopy, hScroll].forEach((el, i) => {
     if (!el) return;
     el.classList.add('hv');
@@ -81,8 +78,6 @@ function revealHero() {
 
 /* ─────────────────────────────────────────────
    3. PARTICLE SYSTEM
-   55 floating orbs + 7 slow nebula blobs.
-   Entirely on canvas behind the photo.
 ───────────────────────────────────────────── */
 const canvas = document.getElementById('ptcl');
 const ctx    = canvas.getContext('2d');
@@ -98,17 +93,15 @@ window.addEventListener('resize', () => { sizeCanvas(); spawnAll(); });
 function rnd(a, b) { return a + Math.random() * (b - a); }
 
 const PALETTES = [
-  [139,111,255], // violet
-  [91, 158,255], // blue
-  [180,160,255], // lavender
-  [220,200,255], // pale
-  [255,255,255], // white
+  [139,111,255],
+  [91, 158,255],
+  [180,160,255],
+  [220,200,255],
+  [255,255,255],
 ];
 
 class Dot {
-  constructor(init) {
-    this.reset(init === true);
-  }
+  constructor(init) { this.reset(init === true); }
   reset(init) {
     this.x    = rnd(0, W);
     this.y    = init ? rnd(0, H) : H + 8;
@@ -249,17 +242,13 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 /* ─────────────────────────────────────────────
-   7. HERO SCROLL — CINEMATIC (Akshay-style)
+   7. HERO SCROLL — CINEMATIC
    
-   As #hero's 310vh tall section scrolls:
-     p = 0 → 1  (eased)
-
-   • Photo: clip-path inset eats bottom → 0% to 102%
-             simultaneously slow ken-burns scale
-   • Name:  spreads outward + fades
-   • Copy:  fades up and away
-   • BG blur: intensifies opacity as photo hides
-   • Glow rings: expand
+   FIX 1: Glow rings fade OUT as photo clips away (p=0.25→0.7)
+           so no empty glowing void remains after photo disappears.
+   FIX 2: bg-blur fades out with the photo — no orphaned purple circle.
+   FIX 3: Particle canvas fades out so particles don't bleed
+           into the work section below.
 ───────────────────────────────────────────── */
 const heroSec = document.getElementById('hero');
 const phImg   = document.getElementById('ph-img');
@@ -274,19 +263,15 @@ function ease(t) { return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2; }
 
 function applyScroll() {
   rafPending = false;
-  const heroH    = heroSec.offsetHeight;
-  const viewH    = window.innerHeight;
-  const rawP     = clamp(lastSY / (heroH - viewH), 0, 1);
-  const p        = ease(rawP);
+  const heroH = heroSec.offsetHeight;
+  const viewH = window.innerHeight;
+  const rawP  = clamp(lastSY / (heroH - viewH), 0, 1);
+  const p     = ease(rawP);
 
-  /* ── Photo: clip from bottom (Akshay mechanic) ──
-     inset(top right bottom left)
-     We push the bottom clip 0→102%, so image sinks out of frame.
-     We also slow-zoom the image to add cinematic weight.
-  */
+  /* ── Photo: clip from bottom (Akshay mechanic) ── */
   const clipB = clamp(p * 108, 0, 102);
   hPhoto.style.clipPath = `inset(0% 0% ${clipB}% 0% round 0px)`;
-  /* Ken-burns scale — only affect the inner img, not the wrapper */
+  /* Ken-burns scale on inner img only */
   if (phImg) phImg.style.transform = `scale(${1 + p * 0.18})`;
 
   /* ── Name: spread apart + fade ── */
@@ -308,20 +293,32 @@ function applyScroll() {
   /* ── Scroll cue ── */
   if (hScroll) hScroll.style.opacity = clamp(1 - p * 5, 0, 1);
 
-  /* ── BG blur: intensifies as photo clips away ──
-     At p=0: subtle. At p=0.5+: becomes prominent atmospheric layer.
+  /* ── FIX 1: Glow rings fade OUT as photo clips away ──
+     Full opacity at p=0 → completely gone by p=0.7.
+     This eliminates the glowing empty circle after photo disappears.
+  */
+  grEls.forEach((g, i) => {
+    const expand = 1 + p * (0.08 + i * 0.04);
+    /* Start fading at p=0.25, fully transparent by p=0.7 */
+    const ringOp = clamp(1 - (p - 0.25) / 0.45, 0, 1);
+    g.style.transform = `translate(-50%,-50%) scale(${expand})`;
+    g.style.opacity   = ringOp;
+  });
+
+  /* ── FIX 2: BG blur fades out with the photo ──
+     Max opacity 0.65 at p=0 → zero by p≈0.55.
+     No orphaned purple atmospheric circle left behind.
   */
   if (bgBlur) {
     const bgScale = 1 + p * 0.06;
+    const bgOp    = clamp(0.65 - p * 1.2, 0, 0.65);
     bgBlur.style.transform = `scale(${bgScale})`;
+    bgBlur.style.opacity   = bgOp;
   }
 
-  /* ── Glow rings: expand ── */
-  grEls.forEach((g, i) => {
-    const expand = 1 + p * (0.08 + i * 0.04);
-    g.style.transform = `translate(-50%,-50%) scale(${expand})`;
-    g.style.opacity   = clamp(1 - p * 0.3, 0.4, 1);
-  });
+  /* ── FIX 3: Particles fade out so they don't float over work section ── */
+  const cvs = document.getElementById('ptcl');
+  if (cvs) cvs.style.opacity = clamp(1 - p * 1.8, 0, 1);
 }
 
 window.addEventListener('scroll', () => {
@@ -330,7 +327,7 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 /* ─────────────────────────────────────────────
-   8. IMAGE 3D TILT  (desktop only — skipped on touch)
+   8. IMAGE 3D TILT  (desktop only)
 ───────────────────────────────────────────── */
 const isTouchDevice = () => window.matchMedia('(hover: none)').matches;
 let tx = 0, ty = 0, ttx = 0, tty = 0;
@@ -395,14 +392,13 @@ buildMarquee();
 
 /* ─────────────────────────────────────────────
    10. STATS COUNTER ANIMATION
-   Counts up from 0 to target when stat enters view
 ───────────────────────────────────────────── */
 function animateCounter(el, target, duration) {
   let start = null;
   const step = (ts) => {
     if (!start) start = ts;
     const p = Math.min((ts - start) / duration, 1);
-    const ease = 1 - Math.pow(1 - p, 3); // ease-out-cubic
+    const ease = 1 - Math.pow(1 - p, 3);
     el.textContent = Math.round(ease * target);
     if (p < 1) requestAnimationFrame(step);
     else el.textContent = target + (target > 9 ? '+' : '');
@@ -425,7 +421,7 @@ const statIO = new IntersectionObserver(entries => {
 document.querySelectorAll('.stat').forEach(s => statIO.observe(s));
 
 /* ─────────────────────────────────────────────
-   11. SCROLL REVEAL  (IntersectionObserver)
+   11. SCROLL REVEAL
 ───────────────────────────────────────────── */
 const revIO = new IntersectionObserver(entries => {
   entries.forEach(e => {
@@ -450,8 +446,6 @@ document.querySelectorAll('.pc').forEach(card => {
 
 /* ─────────────────────────────────────────────
    13. NAME HOVER GLOW
-   When mouse moves over the name area, letters
-   get a subtle fill colour — feels alive.
 ───────────────────────────────────────────── */
 const hnFirst = document.getElementById('hn-first');
 const hnLast  = document.getElementById('hn-last');
