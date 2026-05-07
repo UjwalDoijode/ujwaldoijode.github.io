@@ -39,18 +39,7 @@
   </nav>
 
   <!-- ══════════════════════════════════════════════
-       HERO — full redesign
-       Layout (top → bottom):
-         [BIG CENTERED NAME]
-         [FULL-PORTRAIT PHOTO — no visible border]
-         [role + buttons below photo]
-
-       Behind photo:
-         • blurred + scaled copy of same image (bokeh BG)
-         • particle canvas
-         • animated glow rings
-
-       Scroll: clip-path eats image bottom-up (Akshay style)
+       HERO
   ═════════════════════════════════════════════════ -->
   <section id="hero">
     <div id="h-pin">
@@ -58,44 +47,47 @@
       <!-- LAYER 0: particle canvas -->
       <canvas id="ptcl"></canvas>
 
-      <!-- LAYER 1: blurred bg photo (depth-of-field atmosphere) -->
+      <!-- LAYER 1: blurred bg photo -->
       <div id="bg-blur">
         <img src="profile.jpg" alt="" aria-hidden="true" id="bg-blur-img"/>
         <div class="bg-blur-overlay"></div>
       </div>
 
-      <!-- LAYER 2: subtle glow rings centered on photo -->
+      <!-- LAYER 2: glow rings -->
       <div class="gr gr1"></div>
       <div class="gr gr2"></div>
       <div class="gr gr3"></div>
 
-      <!-- LAYER 3: BIG CENTERED NAME — top of viewport -->
+      <!-- LAYER 3: BIG NAME — split into two words
+           data-text is used by JS to build individual letter spans.
+           On scroll: left word flies left, right word flies right.
+      -->
       <div id="h-name-wrap">
-        <div class="h-name" id="h-name">
-          <span class="hn-first" id="hn-first">UJWAL</span>
-          <span class="hn-last"  id="hn-last">DOIJODE</span>
+        <div class="h-name-split">
+          <!-- JS reads data-text and injects <span class="hn-l"> per letter -->
+          <div class="hn-word" data-text="UJWAL">UJWAL</div>
+          <span class="hn-sep">·</span>
+          <div class="hn-word" data-text="DOIJODE">DOIJODE</div>
         </div>
-        <div class="h-title-line" id="h-title-line">
+        <!-- Subtitle tag line sits just below the name row -->
+        <div id="h-title-line">
           <span class="htl-bar"></span>
-          <span class="htl-text">AI Engineer &amp; Full Stack Developer</span>
+          <span>AI Engineer &amp; Full Stack Developer</span>
           <span class="htl-bar"></span>
         </div>
       </div>
 
-      <!-- LAYER 4: PHOTO — fills center, NO hard border (fades to bg) -->
+      <!-- LAYER 4: PHOTO -->
       <div id="h-photo">
-        <!-- top/side fades are bg-color gradients, so photo melts into bg -->
         <div class="ph-fade ph-fade-top"></div>
         <div class="ph-fade ph-fade-left"></div>
         <div class="ph-fade ph-fade-right"></div>
         <div class="ph-fade ph-fade-bottom"></div>
-        <!-- actual image -->
-        <img id="ph-img" src="profile.png" alt="Ujwal Doijode"/>
-        <!-- subtle purple color grade to match studio light in photo -->
+        <img id="ph-img" src="profile.jpg" alt="Ujwal Doijode"/>
         <div class="ph-grade"></div>
       </div>
 
-      <!-- LAYER 5: bottom copy — centered under photo -->
+      <!-- LAYER 5: bottom copy -->
       <div id="h-copy">
         <div class="hcp-role">
           <span id="typed"></span><span class="t-caret">|</span>
@@ -114,15 +106,13 @@
         <span>scroll</span>
       </div>
 
-    </div><!-- /h-pin -->
+    </div>
   </section>
 
   <!-- ══════════ MARQUEE ══════════ -->
   <div id="mq"><div class="mq-track" id="mq-t"></div></div>
 
-  <!-- ══════════════════════════════════════════════
-       STATS ROW — small numbers between marquee & work
-  ═════════════════════════════════════════════════ -->
+  <!-- ══════════ STATS ══════════ -->
   <div id="stats">
     <div class="stat rs">
       <div class="stat-n" data-target="2">0</div>
@@ -145,9 +135,7 @@
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════
-       WORK
-  ═════════════════════════════════════════════════ -->
+  <!-- ══════════ WORK ══════════ -->
   <section id="work">
     <div class="sw">
       <span class="eye rs">Selected Work</span>
@@ -198,20 +186,16 @@
           <div class="pc-tech"><span>LangChain</span><span>LangGraph</span><span>FastAPI</span><span>Spring Boot</span><span>Java</span><span>JS</span></div>
         </div>
       </article>
-
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════════════
-       EXPERIENCE
-  ═════════════════════════════════════════════════ -->
+  <!-- ══════════ EXPERIENCE ══════════ -->
   <section id="experience">
     <div class="sw">
       <span class="eye rs">Career</span>
       <h2 class="sh rs">Where I've<br><em>built things.</em></h2>
 
       <div class="ex-list">
-
         <div class="ex-item rs">
           <div class="ex-tl">
             <div class="ex-dot"></div>
@@ -246,21 +230,17 @@
             </ul>
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════════════
-       SKILLS
-  ═════════════════════════════════════════════════ -->
+  <!-- ══════════ SKILLS ══════════ -->
   <section id="skills">
     <div class="sw">
       <span class="eye rs">Arsenal</span>
       <h2 class="sh rs">Tech I build<br><em>with.</em></h2>
 
       <div class="sk-wrap rs">
-
         <div class="sk-cat">
           <div class="sk-lbl">Languages</div>
           <div class="sk-row">
@@ -308,7 +288,6 @@
             <div class="ski ski-e"><span class="ske">🤖</span><span>LLM Routing</span></div>
           </div>
         </div>
-
       </div>
     </div>
   </section>
