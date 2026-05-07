@@ -11,167 +11,218 @@
 </head>
 <body>
 
-  <!-- ═══════════ LOADER ═══════════ -->
+  <!-- ══════════ LOADER ══════════ -->
   <div id="loader">
-    <div class="ld-top"><div class="ld-name">Ujwal.</div></div>
-    <div class="ld-bot">
-      <div class="ld-label">Loading Experience</div>
-      <div class="ld-pct"><span id="ld-num">0</span><sup>%</sup></div>
-      <div class="ld-bar"><div id="ld-fill"></div></div>
+    <div class="ld-brand">Ujwal.</div>
+    <div class="ld-foot">
+      <p class="ld-lbl">Loading Experience</p>
+      <div class="ld-num"><span id="ld-n">0</span><sup>%</sup></div>
+      <div class="ld-track"><div id="ld-fill"></div></div>
     </div>
   </div>
 
-  <!-- ═══════════ CURSOR ═══════════ -->
-  <div id="cur-dot"></div>
-  <div id="cur-ring"></div>
-  <div id="cur-glow"></div>
+  <!-- ══════════ CURSOR ══════════ -->
+  <div id="c-dot"></div>
+  <div id="c-ring"></div>
+  <div id="c-glow"></div>
 
-  <!-- ═══════════ NAV ═══════════ -->
+  <!-- ══════════ NAV ══════════ -->
   <nav id="nav">
-    <a href="#" class="nav-logo">Ujwal.</a>
-    <div class="nav-links">
+    <a href="#" class="n-logo">Ujwal.</a>
+    <div class="n-links">
       <a href="#work">Work</a>
       <a href="#experience">Experience</a>
       <a href="#skills">Skills</a>
-      <a href="https://drive.google.com/drive/folders/1ykmNU4GNyaDHZwU9pSG7kbeBnA8T7ddv" target="_blank" class="nav-cv">Résumé ↗</a>
+      <a href="https://drive.google.com/drive/folders/1ykmNU4GNyaDHZwU9pSG7kbeBnA8T7ddv"
+         target="_blank" class="n-cv">Résumé ↗</a>
     </div>
   </nav>
 
-  <!-- ═══════════════════════════════════════════════
-       HERO
-       • Image fills 100vh immediately on load (no drift)
-       • Flanking letters U-J-W-A-L | D-O-I-J-O-D-E
-       • Scroll → image clips upward (clip-path) 
-         text stays as image disappears under it
-  ════════════════════════════════════════════════ -->
-  <section id="hero">
-    <div id="hero-pin">
+  <!-- ══════════════════════════════════════════════
+       HERO — full redesign
+       Layout (top → bottom):
+         [BIG CENTERED NAME]
+         [FULL-PORTRAIT PHOTO — no visible border]
+         [role + buttons below photo]
 
-      <!-- Particle canvas (behind everything) -->
+       Behind photo:
+         • blurred + scaled copy of same image (bokeh BG)
+         • particle canvas
+         • animated glow rings
+
+       Scroll: clip-path eats image bottom-up (Akshay style)
+  ═════════════════════════════════════════════════ -->
+  <section id="hero">
+    <div id="h-pin">
+
+      <!-- LAYER 0: particle canvas -->
       <canvas id="ptcl"></canvas>
 
-      <!-- Glow rings (CSS animated) -->
-      <div class="glow-ring gr1"></div>
-      <div class="glow-ring gr2"></div>
-      <div class="glow-ring gr3"></div>
-
-      <!-- Full-screen photo -->
-      <div id="img-wrap">
-        <img id="hero-img" src="profile.png" alt="Ujwal Doijode"/>
-        <div class="img-grade"></div>
-        <div class="img-vign"></div>
-        <div class="img-vign-bottom"></div>
+      <!-- LAYER 1: blurred bg photo (depth-of-field atmosphere) -->
+      <div id="bg-blur">
+        <img src="profile.jpg" alt="" aria-hidden="true" id="bg-blur-img"/>
+        <div class="bg-blur-overlay"></div>
       </div>
 
-      <!-- Flanking big letters (UJWAL left, DOIJODE right) -->
-      <div id="flank-l" class="flank">
-        <span>U</span><span>J</span><span>W</span><span>A</span><span>L</span>
-      </div>
-      <div id="flank-r" class="flank">
-        <span>D</span><span>O</span><span>I</span><span>J</span><span>O</span><span>D</span><span>E</span>
-      </div>
+      <!-- LAYER 2: subtle glow rings centered on photo -->
+      <div class="gr gr1"></div>
+      <div class="gr gr2"></div>
+      <div class="gr gr3"></div>
 
-      <!-- Bottom copy overlay -->
-      <div id="hero-copy">
-        <div class="hc-l">
-          <div class="hc-role"><span id="typed"></span><span class="tc">|</span></div>
-          <p class="hc-sub">AI systems · Scalable backends · High-performance web</p>
+      <!-- LAYER 3: BIG CENTERED NAME — top of viewport -->
+      <div id="h-name-wrap">
+        <div class="h-name" id="h-name">
+          <span class="hn-first" id="hn-first">UJWAL</span>
+          <span class="hn-last"  id="hn-last">DOIJODE</span>
         </div>
-        <div class="hc-r">
-          <a href="#work" class="btn-p">View Work ↓</a>
-          <a href="https://github.com/UjwalDoijode" target="_blank" class="btn-g">GitHub ↗</a>
-          <a href="https://www.linkedin.com/in/ujwal-k-doijode-7903a7205" target="_blank" class="btn-g">LinkedIn ↗</a>
+        <div class="h-title-line" id="h-title-line">
+          <span class="htl-bar"></span>
+          <span class="htl-text">AI Engineer &amp; Full Stack Developer</span>
+          <span class="htl-bar"></span>
         </div>
       </div>
 
-      <!-- scroll indicator -->
-      <div id="scrl">
-        <div class="scrl-bar"><div class="scrl-dot"></div></div>
+      <!-- LAYER 4: PHOTO — fills center, NO hard border (fades to bg) -->
+      <div id="h-photo">
+        <!-- top/side fades are bg-color gradients, so photo melts into bg -->
+        <div class="ph-fade ph-fade-top"></div>
+        <div class="ph-fade ph-fade-left"></div>
+        <div class="ph-fade ph-fade-right"></div>
+        <div class="ph-fade ph-fade-bottom"></div>
+        <!-- actual image -->
+        <img id="ph-img" src="profile.jpg" alt="Ujwal Doijode"/>
+        <!-- subtle purple color grade to match studio light in photo -->
+        <div class="ph-grade"></div>
+      </div>
+
+      <!-- LAYER 5: bottom copy — centered under photo -->
+      <div id="h-copy">
+        <div class="hcp-role">
+          <span id="typed"></span><span class="t-caret">|</span>
+        </div>
+        <p class="hcp-sub">Building AI systems · Scalable backends · High-performance web</p>
+        <div class="hcp-btns">
+          <a href="#work"  class="btn-v">View Work ↓</a>
+          <a href="https://github.com/UjwalDoijode" target="_blank" class="btn-o">GitHub ↗</a>
+          <a href="https://www.linkedin.com/in/ujwal-k-doijode-7903a7205" target="_blank" class="btn-o">LinkedIn ↗</a>
+        </div>
+      </div>
+
+      <!-- scroll cue -->
+      <div id="h-scroll">
+        <div class="hs-bar"><div class="hs-dot"></div></div>
         <span>scroll</span>
       </div>
 
-    </div>
+    </div><!-- /h-pin -->
   </section>
 
-  <!-- ═══════════ MARQUEE ═══════════ -->
-  <div id="mq-wrap"><div class="mq-track" id="mq"></div></div>
+  <!-- ══════════ MARQUEE ══════════ -->
+  <div id="mq"><div class="mq-track" id="mq-t"></div></div>
 
-  <!-- ═══════════════════════════════════════════════
+  <!-- ══════════════════════════════════════════════
+       STATS ROW — small numbers between marquee & work
+  ═════════════════════════════════════════════════ -->
+  <div id="stats">
+    <div class="stat rs">
+      <div class="stat-n" data-target="2">0</div>
+      <div class="stat-l">Years Experience</div>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat rs" style="--rd:.1s">
+      <div class="stat-n" data-target="10">0</div>
+      <div class="stat-l">Enterprise Workflows Built</div>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat rs" style="--rd:.2s">
+      <div class="stat-n" data-target="55">0</div>
+      <div class="stat-l">% UI Blocking Reduced</div>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat rs" style="--rd:.3s">
+      <div class="stat-n" data-target="35">0</div>
+      <div class="stat-l">% Faster Debugging</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
        WORK
-  ════════════════════════════════════════════════ -->
+  ═════════════════════════════════════════════════ -->
   <section id="work">
     <div class="sw">
-      <div class="sh">
-        <span class="eye rs">Selected Work</span>
-        <h2 class="stitle rs">Projects that<br><em>matter.</em></h2>
-      </div>
+      <span class="eye rs">Selected Work</span>
+      <h2 class="sh rs">Projects that<br><em>matter.</em></h2>
 
       <article class="pc rs">
-        <div class="pcn">01</div>
-        <div class="pcb">
-          <div class="pcm"><span class="pct-tag">AI · RAG · Backend</span><span class="pct-yr">2024</span></div>
-          <h3 class="pc-name">Hybrid RAG System<br><small>with Reranking</small></h3>
-          <p class="pc-desc">Production-grade retrieval combining BM25 sparse + dense vector embeddings via Reciprocal Rank Fusion, reranked by an LLM. Improved response accuracy by <strong>30%</strong> over baseline vector-only retrieval.</p>
-          <ul class="pc-list">
+        <div class="pc-n">01</div>
+        <div class="pc-b">
+          <div class="pc-m"><span class="pc-tag">AI · RAG · Backend</span><span class="pc-yr">2024</span></div>
+          <h3 class="pc-h">Hybrid RAG System<br><small>with Reranking</small></h3>
+          <p class="pc-d">Production-grade retrieval combining BM25 sparse + dense vector embeddings via Reciprocal Rank Fusion, then reranked by an LLM. Improved response accuracy by <strong>30%</strong> over baseline retrieval.</p>
+          <ul class="pc-l">
             <li>BM25 + vector embeddings fused via RRF for top-10+ doc retrieval</li>
             <li>LLM-based reranking layer for final response quality</li>
             <li>Modular pipeline — swap any retriever or reranker independently</li>
           </ul>
-          <div class="pc-stack"><span>Python</span><span>LangChain</span><span>LangGraph</span><span>Vector DB</span><span>FastAPI</span></div>
+          <div class="pc-tech"><span>Python</span><span>LangChain</span><span>LangGraph</span><span>Vector DB</span><span>FastAPI</span></div>
         </div>
       </article>
 
-      <article class="pc rs" style="--rd:.12s">
-        <div class="pcn">02</div>
-        <div class="pcb">
-          <div class="pcm"><span class="pct-tag">Observability · LLMOps</span><span class="pct-yr">2024</span></div>
-          <h3 class="pc-name">AI Observability<br><small>Pipeline</small></h3>
-          <p class="pc-desc">Lightweight observability layer for monitoring LLM agents in production. Tracks every tool call, latency spike and token expenditure — cutting debugging time by <strong>35%</strong>.</p>
-          <ul class="pc-list">
+      <article class="pc rs" style="--rd:.1s">
+        <div class="pc-n">02</div>
+        <div class="pc-b">
+          <div class="pc-m"><span class="pc-tag">Observability · LLMOps</span><span class="pc-yr">2024</span></div>
+          <h3 class="pc-h">AI Observability<br><small>Pipeline</small></h3>
+          <p class="pc-d">Lightweight observability for monitoring LLM agents in production. Tracks every tool call, latency spike and token expenditure — cutting debugging time by <strong>35%</strong>.</p>
+          <ul class="pc-l">
             <li>Agent execution traces, tool call logs, latency dashboards</li>
             <li>Token usage monitoring across all workflow steps</li>
-            <li>LangSmith + Prometheus integration with Grafana visualization</li>
+            <li>LangSmith + Prometheus + Grafana visualization</li>
           </ul>
-          <div class="pc-stack"><span>Python</span><span>LangSmith</span><span>Prometheus</span><span>Grafana</span><span>LangGraph</span></div>
+          <div class="pc-tech"><span>Python</span><span>LangSmith</span><span>Prometheus</span><span>Grafana</span><span>LangGraph</span></div>
         </div>
       </article>
 
-      <article class="pc rs" style="--rd:.24s">
-        <div class="pcn">03</div>
-        <div class="pcb">
-          <div class="pcm"><span class="pct-tag">Agentic AI · Enterprise</span><span class="pct-yr">2023–Present</span></div>
-          <h3 class="pc-name">Agentic AI Platforms<br><small>@ OpenText</small></h3>
-          <p class="pc-desc">Architected Agentic AI systems and ADT platforms at OpenText supporting 10+ enterprise workflows with modular agent design, used by thousands of enterprise users globally.</p>
-          <ul class="pc-list">
+      <article class="pc rs" style="--rd:.2s">
+        <div class="pc-n">03</div>
+        <div class="pc-b">
+          <div class="pc-m"><span class="pc-tag">Agentic AI · Enterprise</span><span class="pc-yr">2023–Present</span></div>
+          <h3 class="pc-h">Agentic AI Platforms<br><small>@ OpenText</small></h3>
+          <p class="pc-d">Architected Agentic AI systems and ADT platforms supporting 10+ enterprise workflows. Built reusable agent components with stateful multi-step reasoning used by thousands of enterprise users globally.</p>
+          <ul class="pc-l">
             <li>LangChain + LangGraph multi-agent orchestration with modular tool abstractions</li>
             <li>Microsoft 365 integration within Online Editing Services (OES)</li>
             <li>Web Workers + long polling — cut UI blocking time by 55–60%</li>
-            <li>LangSmith + Prometheus observability — 30–40% faster debugging</li>
+            <li>LangSmith + Prometheus — 30–40% faster debugging</li>
           </ul>
-          <div class="pc-stack"><span>LangChain</span><span>LangGraph</span><span>FastAPI</span><span>Spring Boot</span><span>Java</span><span>JS</span></div>
+          <div class="pc-tech"><span>LangChain</span><span>LangGraph</span><span>FastAPI</span><span>Spring Boot</span><span>Java</span><span>JS</span></div>
         </div>
       </article>
+
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════
+  <!-- ══════════════════════════════════════════════
        EXPERIENCE
-  ════════════════════════════════════════════════ -->
+  ═════════════════════════════════════════════════ -->
   <section id="experience">
     <div class="sw">
       <span class="eye rs">Career</span>
-      <h2 class="stitle rs">Where I've<br><em>built things.</em></h2>
+      <h2 class="sh rs">Where I've<br><em>built things.</em></h2>
 
-      <div class="exp-list">
+      <div class="ex-list">
 
-        <div class="exp-item rs">
-          <div class="exp-tl"><div class="exp-dot"></div><div class="exp-rail"></div></div>
-          <div class="exp-content">
-            <div class="exp-date">Sep 2023 — Present</div>
-            <div class="exp-role">Software Engineer</div>
-            <div class="exp-co">OpenText <span>· Bangalore, Karnataka</span></div>
-            <ul class="exp-pts">
-              <li>Built Agentic AI systems using LangChain, LangGraph, FastAPI supporting 10+ enterprise workflows</li>
+        <div class="ex-item rs">
+          <div class="ex-tl">
+            <div class="ex-dot"></div>
+            <div class="ex-rail"></div>
+          </div>
+          <div class="ex-body">
+            <div class="ex-date">Sep 2023 — Present</div>
+            <div class="ex-role">Software Engineer</div>
+            <div class="ex-co">OpenText <span>· Bangalore, Karnataka</span></div>
+            <ul class="ex-pts">
+              <li>Built Agentic AI systems using LangChain, LangGraph, FastAPI — supporting 10+ enterprise workflows with modular agent design</li>
               <li>LangSmith + Prometheus observability — reduced debugging time by 30–40%</li>
               <li>Full-stack: Java, Spring Boot, JavaScript, Backbone.js, Marionette.js across enterprise modules</li>
               <li>Web Workers + long polling cut UI blocking time by 55–60%</li>
@@ -180,16 +231,18 @@
           </div>
         </div>
 
-        <div class="exp-item rs" style="--rd:.14s">
-          <div class="exp-tl"><div class="exp-dot"></div></div>
-          <div class="exp-content">
-            <div class="exp-date">Feb 2023 — Aug 2023</div>
-            <div class="exp-role">Software Developer Intern</div>
-            <div class="exp-co">Microfocus (now OpenText) <span>· Bangalore, Karnataka</span></div>
-            <ul class="exp-pts">
-              <li>Developed and enhanced features in Golang — feature implementation, optimization, defect resolution</li>
-              <li>Deployed product on embedded Kubernetes using Docker, streamlining deployment efficiency</li>
-              <li>Built AWS Lambda function automating VM start/stop — significant cost savings</li>
+        <div class="ex-item rs" style="--rd:.13s">
+          <div class="ex-tl">
+            <div class="ex-dot"></div>
+          </div>
+          <div class="ex-body">
+            <div class="ex-date">Feb 2023 — Aug 2023</div>
+            <div class="ex-role">Software Developer Intern</div>
+            <div class="ex-co">Microfocus (now OpenText) <span>· Bangalore, Karnataka</span></div>
+            <ul class="ex-pts">
+              <li>Developed and enhanced features in Golang — implementation, optimization, defect resolution</li>
+              <li>Deployed product on embedded Kubernetes using Docker, streamlining operational efficiency</li>
+              <li>Built AWS Lambda function automating VM start/stop — significant cost savings for the team</li>
             </ul>
           </div>
         </div>
@@ -198,15 +251,15 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════
+  <!-- ══════════════════════════════════════════════
        SKILLS
-  ════════════════════════════════════════════════ -->
+  ═════════════════════════════════════════════════ -->
   <section id="skills">
     <div class="sw">
       <span class="eye rs">Arsenal</span>
-      <h2 class="stitle rs">Tech I build<br><em>with.</em></h2>
+      <h2 class="sh rs">Tech I build<br><em>with.</em></h2>
 
-      <div class="sk-grid rs">
+      <div class="sk-wrap rs">
 
         <div class="sk-cat">
           <div class="sk-lbl">Languages</div>
@@ -233,7 +286,7 @@
         </div>
 
         <div class="sk-cat">
-          <div class="sk-lbl">DevOps & Data</div>
+          <div class="sk-lbl">DevOps &amp; Data</div>
           <div class="sk-row">
             <div class="ski"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker"><span>Docker</span></div>
             <div class="ski"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg" alt="K8s"><span>Kubernetes</span></div>
@@ -260,7 +313,7 @@
     </div>
   </section>
 
-  <!-- ═══════════ FOOTER ═══════════ -->
+  <!-- ══════════ FOOTER ══════════ -->
   <footer id="footer">
     <div class="ft-glow"></div>
     <div class="ft-in rs">
@@ -268,9 +321,9 @@
       <h2 class="ft-name">Ujwal<br><em>Doijode</em></h2>
       <p class="ft-sub">AI Engineer · Full Stack Developer · Builder<br><span>Open to exciting opportunities</span></p>
       <div class="ft-btns">
-        <a href="mailto:ujwaldoijode@gmail.com" class="btn-p">Email Me</a>
-        <a href="https://www.linkedin.com/in/ujwal-k-doijode-7903a7205" target="_blank" class="btn-g">LinkedIn ↗</a>
-        <a href="https://github.com/UjwalDoijode" target="_blank" class="btn-g">GitHub ↗</a>
+        <a href="mailto:ujwaldoijode@gmail.com" class="btn-v">Email Me</a>
+        <a href="https://www.linkedin.com/in/ujwal-k-doijode-7903a7205" target="_blank" class="btn-o">LinkedIn ↗</a>
+        <a href="https://github.com/UjwalDoijode" target="_blank" class="btn-o">GitHub ↗</a>
       </div>
       <p class="ft-copy">© 2025 Ujwal Doijode · Built with intention</p>
     </div>
