@@ -32,7 +32,7 @@ body{
   font-size:16px;
   line-height:1.6;
   overflow-x:hidden;
-  cursor:none;
+  cursor:auto;
 }
 a{text-decoration:none;color:inherit}
 img{display:block;max-width:100%}
@@ -109,10 +109,10 @@ body::after{
   font-family:var(--fd);font-size:1.3rem;font-weight:700;letter-spacing:-0.02em;
   background:linear-gradient(135deg,var(--tx),var(--v3));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  cursor:none;
+  cursor:pointer;
 }
 .n-links{display:flex;align-items:center;gap:26px}
-.n-links a{font-size:.82rem;letter-spacing:.04em;color:var(--mu);transition:color .2s;cursor:none}
+.n-links a{font-size:.82rem;letter-spacing:.04em;color:var(--mu);transition:color .2s;cursor:pointer}
 .n-links a:hover{color:var(--tx)}
 .n-cv{
   padding:8px 18px!important;border:1px solid var(--bdr2)!important;
@@ -127,7 +127,7 @@ body::after{
    so after the photo clips away, it's just
    clean dark background — zero void.
 ══════════════════════════════════════ */
-#hero{height:300vh;position:relative}
+#hero{height:200vh;position:relative}
 
 #h-pin{
   position:sticky;top:0;height:100vh;
@@ -261,7 +261,7 @@ body.loaded .gr{opacity:1;transform:translate(-50%,-50%) scale(1)}
     opacity   0.65s var(--ez),
     transform 0.65s var(--ez),
     filter    0.25s ease;
-  cursor:none;
+  cursor:default;
 }
 .hn-l.vis{
   opacity:1;
@@ -396,6 +396,139 @@ body.loaded .gr{opacity:1;transform:translate(-50%,-50%) scale(1)}
 .hv.vis{opacity:1;transform:none}
 
 /* ══════════════════════════════════════
+   MID-SCROLL MANIFESTO
+   Fills the scroll void in the hero with
+   a bold statement + metrics.
+══════════════════════════════════════ */
+#h-mid{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  z-index:9;
+  pointer-events:none;
+  opacity:0;
+  padding:0 clamp(20px,6vw,80px);
+  will-change:opacity,transform;
+}
+
+/* subtle radial glow behind text */
+.hm-bg-glow{
+  position:absolute;
+  width:min(760px,90vw);height:min(560px,60vh);
+  border-radius:50%;
+  background:radial-gradient(
+    ellipse,
+    rgba(139,111,255,.22) 0%,
+    rgba(91,158,255,.14)  45%,
+    transparent 70%
+  );
+  filter:blur(64px);
+  pointer-events:none;
+}
+
+/* eyebrow */
+.hm-eye{
+  font-size:10px;letter-spacing:.32em;text-transform:uppercase;
+  color:rgba(180,160,255,.95);margin-bottom:20px;
+  font-family:var(--fb);font-weight:500;
+  position:relative;
+  text-shadow:0 0 18px rgba(139,111,255,.35);
+}
+.hm-eye::before,
+.hm-eye::after{
+  content:'';display:inline-block;vertical-align:middle;
+  width:clamp(20px,4vw,50px);height:1px;
+  background:rgba(139,111,255,.4);
+  margin:0 10px;
+}
+
+/* main headline */
+.hm-headline{
+  font-family:var(--fd);
+  font-size:clamp(2.2rem,5.5vw,5rem);
+  font-weight:700;letter-spacing:-.035em;line-height:1.05;
+  display:flex;flex-direction:column;gap:2px;
+  margin-bottom:28px;position:relative;
+}
+.hm-ln{
+  display:block;
+  color:#f4f1ff;
+  text-shadow:0 0 28px rgba(120,95,255,.22),0 2px 8px rgba(0,0,0,.65);
+}
+.hm-headline em{
+  font-style:normal;
+  background:linear-gradient(135deg,var(--v1) 0%,var(--v2) 55%,var(--v3) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 24px rgba(139,111,255,.28));
+}
+
+/* thin gradient divider */
+.hm-divider{
+  width:clamp(50px,10vw,120px);height:1px;
+  background:linear-gradient(90deg,transparent,rgba(139,111,255,.55),transparent);
+  margin-bottom:24px;position:relative;
+}
+
+/* tech pill tags */
+.hm-tags{
+  display:flex;gap:8px;flex-wrap:wrap;
+  justify-content:center;max-width:640px;
+  margin-bottom:36px;
+}
+.hm-tags span{
+  padding:7px 18px;
+  border:1px solid rgba(139,111,255,.45);
+  border-radius:100px;
+  font-size:.76rem;letter-spacing:.06em;
+  color:rgba(225,214,255,.96);
+  background:rgba(139,111,255,.12);
+  font-family:var(--fb);
+  transition:border-color .25s,background .25s;
+}
+
+/* inline metrics row */
+.hm-metrics{
+  display:flex;align-items:center;gap:0;
+  border:1px solid rgba(139,111,255,.22);border-radius:14px;
+  background:rgba(16,16,26,.52);
+  box-shadow:0 0 36px rgba(91,158,255,.12), inset 0 0 0 1px rgba(255,255,255,.03);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  overflow:hidden;
+}
+.hm-metric{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:16px clamp(20px,4vw,40px);
+}
+.hm-metric-n{
+  font-family:var(--fbb);
+  font-size:clamp(1.6rem,3.5vw,2.5rem);
+  letter-spacing:.01em;line-height:1;
+  background:linear-gradient(135deg,var(--v1),var(--v2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hm-metric-n sup{font-size:.5em;vertical-align:super;opacity:.8}
+.hm-metric-l{
+  font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(238,234,248,.78);white-space:nowrap;
+}
+.hm-metric-div{width:1px;height:40px;background:var(--bdr2);flex-shrink:0}
+
+@media(max-width:768px){
+  .hm-headline{font-size:clamp(1.8rem,7vw,3rem)}
+  .hm-tags span{padding:5px 13px;font-size:.7rem}
+  .hm-metrics{flex-wrap:wrap;border-radius:12px;padding:4px 0}
+  .hm-metric{padding:12px 20px}
+  .hm-metric-div{display:none}
+  .hm-metric-n{font-size:1.6rem}
+}
+@media(max-width:480px){
+  .hm-headline{font-size:clamp(1.5rem,7vw,2.5rem)}
+  .hm-metrics{display:none}
+  .hm-eye::before,.hm-eye::after{width:16px}
+}
+
+/* ══════════════════════════════════════
    BUTTONS
 ══════════════════════════════════════ */
 .btn-v,.btn-o{
@@ -403,7 +536,7 @@ body.loaded .gr{opacity:1;transform:translate(-50%,-50%) scale(1)}
   padding:11px 24px;border-radius:7px;
   font-family:var(--fb);font-size:.83rem;font-weight:500;letter-spacing:.02em;
   transition:transform .25s var(--ez),box-shadow .25s,background .2s,border-color .2s;
-  cursor:none;
+  cursor:pointer;
 }
 .btn-v{
   background:linear-gradient(135deg,var(--v1),var(--v2));color:#fff;
@@ -500,6 +633,16 @@ section{position:relative;z-index:3}
 .pc-l{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
 .pc-l li{font-size:.85rem;color:rgba(238,234,248,.52);padding-left:16px;position:relative;line-height:1.5}
 .pc-l li::before{content:'';position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:linear-gradient(135deg,var(--v1),var(--v2));box-shadow:0 0 5px rgba(139,111,255,.5)}
+.pc-actions{display:flex;gap:10px;margin:-4px 0 16px}
+.pc-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:7px 14px;border-radius:8px;
+  font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--tx);border:1px solid rgba(139,111,255,.34);
+  background:rgba(139,111,255,.08);
+  transition:transform .2s var(--ez),background .2s,border-color .2s;
+}
+.pc-btn:hover{transform:translateY(-2px);background:rgba(139,111,255,.14);border-color:rgba(139,111,255,.55)}
 .pc-tech{display:flex;flex-wrap:wrap;gap:7px}
 .pc-tech span{font-size:10px;letter-spacing:.04em;padding:4px 11px;border-radius:100px;background:var(--bg2);border:1px solid var(--bdr);color:var(--mu);transition:border-color .2s}
 .pc:hover .pc-tech span{border-color:rgba(139,111,255,.22)}
@@ -574,7 +717,7 @@ section{position:relative;z-index:3}
   a,.btn-v,.btn-o{cursor:pointer}
   .n-links a:not(.n-cv){display:none}
   #nav{padding:16px 20px}
-  #hero{height:240vh}
+  #hero{height:170vh}
   #h-photo{width:min(78vw,360px)}
   .h-name-split{flex-direction:column;gap:2px;align-items:center}
   .hn-sep{display:none}
@@ -606,7 +749,7 @@ section{position:relative;z-index:3}
 }
 
 @media(max-width:480px){
-  #hero{height:220vh}
+  #hero{height:160vh}
   #h-photo{width:88vw}
   .hn-l{font-size:clamp(2.6rem,13vw,4.2rem)}
   #h-title-line{display:none}
@@ -635,10 +778,16 @@ section{position:relative;z-index:3}
 }
 
 @media(max-height:500px) and (orientation:landscape){
-  #hero{height:270vh}
+  #hero{height:170vh}
   #h-photo{width:clamp(140px,30vw,240px);height:100vh;bottom:0;top:0}
   .hn-l{font-size:clamp(1.6rem,4.5vw,3rem)}
   #h-copy{bottom:8px}
   .hcp-btns{flex-direction:row}
   #h-scroll{display:none}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  #c-dot,#c-ring,#c-glow{display:none!important}
+  .mq-track{animation:none!important;transform:none!important}
 }

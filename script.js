@@ -11,6 +11,7 @@
 const loader = document.getElementById('loader');
 const ldN    = document.getElementById('ld-n');
 const ldFill = document.getElementById('ld-fill');
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 let prog = 0;
 const loadInterval = setInterval(() => {
@@ -31,8 +32,13 @@ function onLoaded() {
   document.body.classList.add('loaded');
   buildName();       // build letter spans before revealing
   revealHero();
-  initParticles();
-  startTyping();
+  if (!reduceMotion) {
+    initParticles();
+    startTyping();
+  } else {
+    const typed = document.getElementById('typed');
+    if (typed) typed.textContent = 'AI Engineer';
+  }
 }
 
 /* ─────────────────────────────────────────────
@@ -64,6 +70,22 @@ const hScroll = document.getElementById('h-scroll');
 const hTLine  = document.getElementById('h-title-line');
 
 function revealHero() {
+  if (reduceMotion) {
+    hPhoto.style.opacity = '1';
+    hPhoto.style.filter = 'none';
+    hPhoto.style.transform = 'translateX(-50%)';
+    document.querySelectorAll('.hn-l').forEach(l => l.classList.add('vis'));
+    const sepNow = document.querySelector('.hn-sep');
+    if (sepNow) sepNow.classList.add('vis');
+    if (hTLine) hTLine.classList.add('vis');
+    [hCopy, hScroll].forEach(el => {
+      if (!el) return;
+      el.classList.add('hv');
+      el.classList.add('vis');
+    });
+    return;
+  }
+
   /* Photo entrance */
   hPhoto.style.cssText = `
     opacity: 0;
@@ -215,29 +237,31 @@ const cGlow = document.getElementById('c-glow');
 let mx = window.innerWidth / 2, my = window.innerHeight / 2;
 let rx = mx, ry = my;
 
-document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  cDot.style.left = mx + 'px'; cDot.style.top  = my + 'px';
-  cGlow.style.left = mx + 'px'; cGlow.style.top = my + 'px';
-  cGlow.style.opacity = '1';
-});
-document.addEventListener('mouseleave', () => cGlow.style.opacity = '0');
-(function ringLoop() {
-  rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1;
-  cRing.style.left = rx + 'px'; cRing.style.top = ry + 'px';
-  requestAnimationFrame(ringLoop);
-})();
+if (!reduceMotion) {
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cDot.style.left = mx + 'px'; cDot.style.top  = my + 'px';
+    cGlow.style.left = mx + 'px'; cGlow.style.top = my + 'px';
+    cGlow.style.opacity = '1';
+  });
+  document.addEventListener('mouseleave', () => cGlow.style.opacity = '0');
+  (function ringLoop() {
+    rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1;
+    cRing.style.left = rx + 'px'; cRing.style.top = ry + 'px';
+    requestAnimationFrame(ringLoop);
+  })();
 
-document.querySelectorAll('a,.btn-v,.btn-o,.ski').forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    cDot.style.width = '12px'; cDot.style.height = '12px'; cDot.style.background = 'var(--v2)';
-    cRing.style.width = '52px'; cRing.style.height = '52px'; cRing.style.borderColor = 'rgba(91,158,255,0.75)';
+  document.querySelectorAll('a,.btn-v,.btn-o,.ski').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cDot.style.width = '12px'; cDot.style.height = '12px'; cDot.style.background = 'var(--v2)';
+      cRing.style.width = '52px'; cRing.style.height = '52px'; cRing.style.borderColor = 'rgba(91,158,255,0.75)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cDot.style.width = '6px'; cDot.style.height = '6px'; cDot.style.background = 'var(--v1)';
+      cRing.style.width = '32px'; cRing.style.height = '32px'; cRing.style.borderColor = 'rgba(139,111,255,0.5)';
+    });
   });
-  el.addEventListener('mouseleave', () => {
-    cDot.style.width = '6px'; cDot.style.height = '6px'; cDot.style.background = 'var(--v1)';
-    cRing.style.width = '32px'; cRing.style.height = '32px'; cRing.style.borderColor = 'rgba(139,111,255,0.5)';
-  });
-});
+}
 
 /* ─────────────────────────────────────────────
    7. NAV
@@ -265,6 +289,7 @@ const wordLeft = document.querySelector('.hn-word[data-text="UJWAL"]');
 const wordRight= document.querySelector('.hn-word[data-text="DOIJODE"]');
 const nameSep  = document.querySelector('.hn-sep');
 const nameWrap = document.getElementById('h-name-wrap');
+const hMid     = document.getElementById('h-mid');
 
 let lastSY = 0, rafPending = false;
 
@@ -277,65 +302,77 @@ function applyScroll() {
   rafPending = false;
   const heroH = heroSec.offsetHeight;
   const viewH = window.innerHeight;
-  const rawP  = clamp(lastSY / (heroH - viewH), 0, 1);
-  const p     = ease(rawP);
+  const rawP  = clamp(lastSY / Math.max(1, heroH - viewH), 0, 1);
+  const p     = rawP;
 
-  /* ── Photo: clip from bottom ── */
-  const clipB = clamp(p * 110, 0, 102);
-  hPhoto.style.clipPath = `inset(0% 0% ${clipB}% 0% round 0px)`;
-  if (phImg) phImg.style.transform = `scale(${1 + p * 0.15})`;
+  /* ── Photo: smooth parallax/fade (no hard clip to avoid banding) ── */
+  hPhoto.style.clipPath = 'none';
+  hPhoto.style.opacity = `${clamp(1 - p * 0.55, 0.45, 1)}`;
+  hPhoto.style.transform = `translateX(-50%) translateY(${-p * 34}px)`;
+  if (phImg) phImg.style.transform = `scale(${1 + p * 0.08})`;
 
   /* ── NAME SPLIT: UJWAL flies LEFT, DOIJODE flies RIGHT ──
      Starts moving at p=0, fully off-screen by p=0.5.
      translateX uses viewport width so it's always off-screen.
   */
-  const splitP = clamp(p / 0.5, 0, 1); // 0→1 during first half of scroll
-  const splitE = easeIn(splitP);         // accelerates out — feels snappy
-  const vwOffset = window.innerWidth * 0.55; // how far off screen
+  const splitP = clamp((p - 0.05) / 0.55, 0, 1);
+  const splitE = easeIn(splitP);
+  const vwOffset = window.innerWidth * 0.28;
 
   if (wordLeft) {
     wordLeft.style.transform = `translateX(${-splitE * vwOffset}px)`;
-    wordLeft.style.opacity   = clamp(1 - splitP * 1.4, 0, 1);
+    wordLeft.style.opacity   = clamp(1 - splitP * 0.9, 0.18, 1);
   }
   if (wordRight) {
     wordRight.style.transform = `translateX(${splitE * vwOffset}px)`;
-    wordRight.style.opacity   = clamp(1 - splitP * 1.4, 0, 1);
+    wordRight.style.opacity   = clamp(1 - splitP * 0.9, 0.18, 1);
   }
   if (nameSep) {
-    nameSep.style.opacity   = clamp(0.8 - splitP * 2, 0, 0.8);
+    nameSep.style.opacity   = clamp(0.8 - splitP * 0.9, 0.18, 0.8);
     nameSep.style.transform = `scale(${1 - splitP * 0.3})`;
   }
-  /* Whole name wrap fades once letters are gone */
-  if (nameWrap) nameWrap.style.opacity = clamp(1 - p * 2.5, 0, 1);
+  if (nameWrap) nameWrap.style.opacity = clamp(1 - p * 0.75, 0.25, 1);
 
   /* ── Subtitle + copy ── */
   if (hTLine) {
-    hTLine.style.opacity   = clamp(1 - p * 3, 0, 1);
+    hTLine.style.opacity   = clamp(1 - p * 1.2, 0.25, 1);
     hTLine.style.transform = `translateY(${-p * 20}px)`;
   }
-  const copyOp = clamp(1 - p * 2.8, 0, 1);
+  const copyOp = clamp(1 - p * 1.1, 0.22, 1);
   if (hCopy) {
     hCopy.style.opacity   = copyOp;
     hCopy.style.transform = `translateY(${-p * 40}px)`;
   }
-  if (hScroll) hScroll.style.opacity = clamp(1 - p * 5, 0, 1);
+  if (hScroll) hScroll.style.opacity = clamp(1 - p * 3.6, 0, 1);
 
   /* ── Glow rings: fade to zero ── */
   grEls.forEach((g, i) => {
     const expand = 1 + p * (0.06 + i * 0.03);
-    const ringOp = clamp(1 - (p - 0.2) / 0.4, 0, 1);
+    const ringOp = clamp(1 - p * 0.55, 0.28, 1);
     g.style.transform = `translate(-50%,-50%) scale(${expand})`;
     g.style.opacity   = ringOp;
   });
 
   /* ── BG blur: fades to zero, no orphaned atmosphere ── */
   if (bgBlur) {
-    bgBlur.style.opacity   = clamp(0.5 - p * 1.1, 0, 0.5);
+    bgBlur.style.opacity   = clamp(0.5 - p * 0.25, 0.28, 0.5);
     bgBlur.style.transform = `scale(${1 + p * 0.05})`;
   }
 
-  /* ── Particles: fade out so they don't bleed below ── */
-  canvas.style.opacity = clamp(1 - p * 2, 0, 1);
+  /* ── Particles persist lightly through the sticky section ── */
+  canvas.style.opacity = clamp(1 - p * 0.5, 0.45, 1);
+
+  /* ── Mid-scroll manifesto: enters early and stays present through most of hero ── */
+  if (hMid) {
+    const mIn  = clamp((p - 0.08) / 0.18, 0, 1);
+    const mOut = clamp((p - 0.94) / 0.06, 0, 1);
+    const mBase = ease(mIn) * (1 - ease(mOut));
+    const mOp  = clamp(mBase * 1.05, 0, 1);
+    const mY   = (1 - ease(mIn)) * 70;
+    const mScale = 0.985 + (ease(mIn) * 0.015);
+    hMid.style.opacity   = mOp;
+    hMid.style.transform = `translateY(${mY}px) scale(${mScale})`;
+  }
 }
 
 window.addEventListener('scroll', () => {
@@ -359,6 +396,7 @@ document.addEventListener('mousemove', e => {
 document.addEventListener('mouseleave', () => { ttx = 0; tty = 0; });
 
 (function tiltLoop() {
+  if (reduceMotion) return;
   if (!isTouchDevice()) {
     tx += (ttx - tx) * 0.06; ty += (tty - ty) * 0.06;
     if (phImg && lastSY < window.innerHeight * 0.25) {
